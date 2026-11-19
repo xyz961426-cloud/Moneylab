@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 from lesson1 import lesson1
 from lesson2 import lesson2
 from lesson3 import lesson3
+from lesson4 import show_lesson4
 
 st.set_page_config(page_title="MoneyLab", page_icon="💰", layout="wide")
 
@@ -194,7 +195,10 @@ elif page == "Lesson 2":
 
 elif page == "Lesson 3":
     lesson3()
-
+    
+elif page == "Lesson 4":
+    show_lesson4()
+    
 elif page == "Progress":
     st.title("🏆 Progress")
 
