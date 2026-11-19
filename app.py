@@ -200,7 +200,7 @@ elif page == "Lesson 3":
 elif page == "Lesson 4":
     show_lesson4()
     
- elif page == "Lesson 5":
+elif page == "Lesson 5":
     show_lesson5()
      
 elif page == "Progress":
