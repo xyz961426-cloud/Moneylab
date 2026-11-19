@@ -1,270 +1,366 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 def show_lesson4():
 
-    st.title("💼 Your First Salary")
-    st.caption("MoneyLab | Learn Money by Living It")
+    if "l4_story_scene" not in st.session_state:
+        st.session_state.l4_story_scene = 0
+        st.session_state.l4_story_cash = 30000
+        st.session_state.l4_story_savings = 0
+        st.session_state.l4_story_spent = 0
+        st.session_state.l4_story_weekend = None
+        st.session_state.l4_story_paid = set()
+        st.session_state.l4_story_emergency = None
+
+    cash = st.session_state.l4_story_cash
+    savings = st.session_state.l4_story_savings
+    scene = st.session_state.l4_story_scene
 
     st.markdown("""
-    <div style="background:linear-gradient(135deg,#132b46,#1c5a72);
-    padding:25px;border-radius:18px;color:white;">
-    <h2>Welcome to your first month of financial independence!</h2>
-    <p>You have just received your salary. Your decisions will determine
-    how much money you keep, save and spend.</p>
-    </div>
+    <style>
+    .storybox {
+        background: linear-gradient(135deg,#101d35,#203d65,#28577a);
+        padding:25px;
+        border-radius:20px;
+        color:white;
+        animation: fadein 1.2s ease-in-out;
+        border:1px solid #42698b;
+        margin-bottom:15px;
+    }
+    .character {
+        font-size:60px;
+        text-align:center;
+        animation: float 2s infinite ease-in-out;
+    }
+    .dialogue {
+        background:rgba(255,255,255,0.08);
+        padding:16px;
+        border-radius:14px;
+        font-size:17px;
+        margin-top:15px;
+        line-height:1.7;
+    }
+    @keyframes float {
+        0%,100% {transform:translateY(0);}
+        50% {transform:translateY(-10px);}
+    }
+    @keyframes fadein {
+        from {opacity:0;transform:translateY(20px);}
+        to {opacity:1;transform:translateY(0);}
+    }
+    @keyframes pulse {
+        0%,100% {opacity:1;}
+        50% {opacity:0.6;}
+    }
+    .money {
+        color:#7df0bb;
+        font-size:28px;
+        font-weight:bold;
+        text-align:center;
+        animation:pulse 2s infinite;
+    }
+    </style>
     """, unsafe_allow_html=True)
 
-    if "l4_started" not in st.session_state:
-        st.session_state.l4_started = False
-        st.session_state.l4_cash = 30000
-        st.session_state.l4_savings = 0
-        st.session_state.l4_paid = set()
-        st.session_state.l4_purchases = set()
-        st.session_state.l4_emergency = False
-        st.session_state.l4_emergency_paid = False
+    st.title("💼 Your First Salary")
+    st.caption("MoneyLab presents: A month that changes everything")
 
-    if not st.session_state.l4_started:
+    st.markdown(
+        f"### 💳 Cash: ₹{cash:,}  |  🏦 Savings: ₹{savings:,}"
+    )
 
-        st.markdown("### 💰 Your Salary")
-        st.metric("Monthly Salary", "₹30,000")
+    # SCENE 1
+    if scene == 0:
 
-        st.markdown("""
-        Your salary has arrived.
+        components.html("""
+        <div class="storybox">
+        <div class="character">🏢</div>
+        <h2 style="text-align:center;color:white;">6:02 PM — Payday</h2>
+        <div class="dialogue">
+        The office lights are slowly turning off.<br><br>
+        You have just finished your first month at your new job.
+        Your phone vibrates.
+        </div>
+        <div class="money">+ ₹30,000</div>
+        <div class="dialogue">
+        <b>Bank notification:</b><br>
+        Salary credited successfully.<br><br>
+        You stare at your phone. This is the first money
+        you earned yourself.
+        </div>
+        </div>
+        """, height=370)
 
-        Your mission:
-        - Pay essential expenses.
-        - Make smart spending decisions.
-        - Handle an unexpected emergency.
-        - Protect your savings.
-        """)
+        st.write("Your financial journey begins now.")
 
-        if st.button("Start Your Month 🚀", use_container_width=True):
-            st.session_state.l4_started = True
+        if st.button("Continue →", use_container_width=True):
+            st.session_state.l4_story_scene = 1
             st.rerun()
 
-    else:
+    # SCENE 2
+    elif scene == 1:
 
-        st.markdown("### 🏦 Your Financial Dashboard")
+        components.html("""
+        <div class="storybox">
+        <div class="character">📱</div>
+        <h2 style="color:white;">7:15 PM — The Invitation</h2>
+        <div class="dialogue">
+        Your friend calls you.<br><br>
+        <b>Friend:</b> "Hey! Your salary arrived?
+        Let's go out this weekend.
+        We've planned a great evening!"
+        </div>
+        <div class="dialogue">
+        You know this weekend could cost money.
+        But you also want to enjoy your first salary.
+        </div>
+        </div>
+        """, height=300)
+
+        st.markdown("### What do you decide?")
 
         col1, col2, col3 = st.columns(3)
 
-        col1.metric("Available Cash", f"₹{st.session_state.l4_cash:,}")
-        col2.metric("Savings", f"₹{st.session_state.l4_savings:,}")
-        col3.metric(
-            "Total Wealth",
-            f"₹{st.session_state.l4_cash + st.session_state.l4_savings:,}"
-        )
+        with col1:
+            st.markdown("**Luxury**")
+            st.caption("Expensive dinner + shopping")
+            if st.button("Spend ₹4,000", use_container_width=True):
+                if cash >= 4000:
+                    st.session_state.l4_story_cash -= 4000
+                    st.session_state.l4_story_spent += 4000
+                    st.session_state.l4_story_weekend = "Luxury"
+                    st.session_state.l4_story_scene = 2
+                    st.rerun()
 
-        st.progress(
-            min(
-                (st.session_state.l4_cash +
-                 st.session_state.l4_savings) / 30000,
-                1.0
-            )
-        )
+        with col2:
+            st.markdown("**Balanced**")
+            st.caption("Enjoy, but set a limit")
+            if st.button("Spend ₹1,500", use_container_width=True):
+                if cash >= 1500:
+                    st.session_state.l4_story_cash -= 1500
+                    st.session_state.l4_story_spent += 1500
+                    st.session_state.l4_story_weekend = "Balanced"
+                    st.session_state.l4_story_scene = 2
+                    st.rerun()
 
-        st.markdown("---")
-        st.markdown("### 🏠 Step 1 — Essential Expenses")
+        with col3:
+            st.markdown("**Stay Home**")
+            st.caption("Keep your money")
+            if st.button("Spend ₹0", use_container_width=True):
+                st.session_state.l4_story_weekend = "Stay Home"
+                st.session_state.l4_story_scene = 2
+                st.rerun()
+
+    # SCENE 3
+    elif scene == 2:
+
+        components.html("""
+        <div class="storybox">
+        <div class="character">🏠</div>
+        <h2 style="color:white;">Monday — Reality Arrives</h2>
+        <div class="dialogue">
+        The weekend is over.<br><br>
+        You sit at your desk and open your banking app.
+        Four payments are waiting for you.
+        </div>
+        <div class="dialogue">
+        <b>Your monthly essentials:</b><br>
+        Rent, food, transportation and utilities.
+        </div>
+        </div>
+        """, height=300)
+
+        st.markdown("### Pay your essential expenses")
 
         expenses = {
-            "Rent": 8000,
-            "Food": 4000,
-            "Transport": 2000,
-            "Utilities": 1500
+            "🏠 Rent": 8000,
+            "🍲 Food": 4000,
+            "🚌 Transport": 2000,
+            "💡 Utilities": 1500
         }
 
         for name, amount in expenses.items():
 
-            if name in st.session_state.l4_paid:
-                st.success(f"✅ {name} paid — ₹{amount:,}")
+            if name in st.session_state.l4_story_paid:
+                st.success(f"{name} — ₹{amount:,} PAID")
 
             else:
                 if st.button(
                     f"Pay {name} — ₹{amount:,}",
-                    key=f"l4_exp_{name}",
+                    key=f"story_pay_{name}",
                     use_container_width=True
                 ):
 
-                    if st.session_state.l4_cash >= amount:
-
-                        st.session_state.l4_cash -= amount
-                        st.session_state.l4_paid.add(name)
-
+                    if cash >= amount:
+                        st.session_state.l4_story_cash -= amount
+                        st.session_state.l4_story_spent += amount
+                        st.session_state.l4_story_paid.add(name)
                         st.rerun()
-
                     else:
-                        st.error("Insufficient money!")
+                        st.error("Not enough cash!")
 
-        st.markdown("---")
-        st.markdown("### 🛍️ Step 2 — Lifestyle Choices")
+        if len(st.session_state.l4_story_paid) == 4:
 
-        shopping = {
-            "Headphones": 3000,
-            "Shoes": 2500,
-            "Gaming Subscription": 1000
-        }
+            st.success("All essential bills have been paid.")
 
-        for name, amount in shopping.items():
-
-            if name in st.session_state.l4_purchases:
-                st.info(f"Purchased: {name} — ₹{amount:,}")
-
-            else:
-
-                if st.button(
-                    f"Buy {name} — ₹{amount:,}",
-                    key=f"l4_buy_{name}",
-                    use_container_width=True
-                ):
-
-                    if st.session_state.l4_cash >= amount:
-
-                        st.session_state.l4_cash -= amount
-                        st.session_state.l4_purchases.add(name)
-
-                        st.rerun()
-
-                    else:
-                        st.error("You cannot afford this purchase.")
-
-        st.markdown("---")
-        st.markdown("### 🚨 Step 3 — Unexpected Emergency")
-
-        if not st.session_state.l4_emergency:
-
-            st.warning(
-                "Your phone suddenly breaks. "
-                "Repair cost: ₹2,000."
-            )
-
-            if st.button("Reveal Emergency", use_container_width=True):
-                st.session_state.l4_emergency = True
+            if st.button("Continue →", use_container_width=True):
+                st.session_state.l4_story_scene = 3
                 st.rerun()
+
+    # SCENE 4
+    elif scene == 3:
+
+        components.html("""
+        <div class="storybox">
+        <div class="character">📱💥</div>
+        <h2 style="color:white;">Thursday — Unexpected Trouble</h2>
+        <div class="dialogue">
+        Your phone falls on the floor.<br><br>
+        The screen is completely broken.
+        </div>
+        <div class="dialogue">
+        <b>Repair shop:</b><br>
+        "The repair will cost ₹2,000."
+        </div>
+        <div class="dialogue">
+        You weren't planning for this expense.
+        What will you do?
+        </div>
+        </div>
+        """, height=330)
+
+        if st.session_state.l4_story_emergency is None:
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button("Pay ₹2,000", use_container_width=True):
+                    if cash >= 2000:
+                        st.session_state.l4_story_cash -= 2000
+                        st.session_state.l4_story_spent += 2000
+                        st.session_state.l4_story_emergency = "Repaired"
+                        st.rerun()
+                    else:
+                        st.error("You don't have enough cash.")
+
+            with col2:
+                if st.button("Delay Repair", use_container_width=True):
+                    st.session_state.l4_story_emergency = "Delayed"
+                    st.rerun()
 
         else:
 
-            if st.session_state.l4_emergency_paid:
-                st.success("Phone repaired.")
+            if st.session_state.l4_story_emergency == "Repaired":
+                st.success("Your phone is repaired.")
 
             else:
+                st.warning("You delayed the repair.")
 
-                st.warning("Phone repair costs ₹2,000.")
+            if st.button("Continue →", use_container_width=True):
+                st.session_state.l4_story_scene = 4
+                st.rerun()
 
-                if st.button("Repair Phone", use_container_width=True):
+    # SCENE 5
+    elif scene == 4:
 
-                    if st.session_state.l4_cash >= 2000:
+        components.html("""
+        <div class="storybox">
+        <div class="character">🌙</div>
+        <h2 style="color:white;">The End of the Month</h2>
+        <div class="dialogue">
+        It's the last day of the month.<br><br>
+        You open your bank account and look at
+        what remains.
+        </div>
+        <div class="dialogue">
+        One month ago, you had no experience
+        managing a salary.<br><br>
+        Now you have made real financial decisions.
+        </div>
+        </div>
+        """, height=300)
 
-                        st.session_state.l4_cash -= 2000
-                        st.session_state.l4_emergency_paid = True
+        st.markdown("### 💰 Protect Your Remaining Money")
 
-                        st.rerun()
+        if cash > 0:
 
-                    else:
-                        st.error(
-                            "You don't have enough cash. "
-                            "Consider whether your savings plan was too aggressive."
-                        )
-
-        st.markdown("---")
-        st.markdown("### 💰 Step 4 — Build Your Savings")
-
-        st.write(
-            "Move money from your available cash into savings. "
-            "Savings are still your money."
-        )
-
-        if st.session_state.l4_cash > 0:
-
-            amount = st.number_input(
-                "Amount to save",
+            save = st.number_input(
+                "Move money into savings",
                 min_value=0,
-                max_value=st.session_state.l4_cash,
+                max_value=cash,
                 step=500,
-                key="l4_saving_input"
+                key="story_final_save"
             )
 
             if st.button("Transfer to Savings", use_container_width=True):
 
-                st.session_state.l4_cash -= amount
-                st.session_state.l4_savings += amount
-
+                st.session_state.l4_story_cash -= save
+                st.session_state.l4_story_savings += save
                 st.rerun()
 
-        else:
-            st.info("No cash available to save.")
-
         st.markdown("---")
-        st.markdown("### 📊 Financial Summary")
 
-        total_salary = 30000
-        total_cash = st.session_state.l4_cash
-        total_savings = st.session_state.l4_savings
-        total_wealth = total_cash + total_savings
+        st.markdown("### 📊 Your Month")
 
-        total_paid = sum(
-            expenses[name]
-            for name in st.session_state.l4_paid
+        col1, col2 = st.columns(2)
+
+        col1.metric("Cash Remaining", f"₹{cash:,}")
+        col2.metric("Savings", f"₹{savings:,}")
+
+        st.metric("Total Wealth", f"₹{cash + savings:,}")
+
+        weekend = st.session_state.l4_story_weekend
+        st.write(f"**Weekend decision:** {weekend}")
+
+        st.write(
+            f"**Essential bills paid:** "
+            f"{len(st.session_state.l4_story_paid)}/4"
         )
 
-        total_shopping = sum(
-            shopping[name]
-            for name in st.session_state.l4_purchases
+        st.write(
+            f"**Phone emergency:** "
+            f"{st.session_state.l4_story_emergency}"
         )
 
-        emergency_cost = (
-            2000 if st.session_state.l4_emergency_paid else 0
-        )
-
-        st.metric("Salary Received", f"₹{total_salary:,}")
-        st.metric("Essential Expenses Paid", f"₹{total_paid:,}")
-        st.metric("Lifestyle Purchases", f"₹{total_shopping:,}")
-        st.metric("Emergency Cost", f"₹{emergency_cost:,}")
-        st.metric("Money Saved", f"₹{total_savings:,}")
-        st.metric("Cash Remaining", f"₹{total_cash:,}")
-
-        st.markdown("### 🧠 What Did You Learn?")
-
-        if total_wealth >= 20000:
-
-            st.success(
-                "Strong financial decisions! You protected a large "
-                "portion of your salary."
-            )
-
-        elif total_wealth >= 10000:
-
-            st.info(
-                "You managed your money reasonably well. "
-                "Try reducing unnecessary spending next time."
-            )
-
-        else:
-
-            st.warning(
-                "Most of your salary has been used. "
-                "Planning expenses before spending can help."
-            )
+        st.markdown("### 🧠 The Lesson")
 
         st.markdown("""
-        **Real financial lessons:**
-
-        - A salary is not the same as wealth.
-        - Essential expenses should be planned first.
-        - Unexpected expenses are part of real life.
-        - Savings are not expenses; they remain your assets.
-        - Spending decisions have opportunity costs.
+        - Your salary is a resource, not unlimited money.
+        - Every purchase has an opportunity cost.
+        - Essential expenses need planning.
+        - Emergencies can happen at any time.
+        - Saving means keeping money for future needs.
+        - A budget gives you control, not restriction.
         """)
 
-        if st.button("Restart Your Month 🔄", use_container_width=True):
+        if cash + savings >= 15000:
+            st.success(
+                "You protected a strong portion of your salary. "
+                "Your decisions helped you build financial security."
+            )
+
+        elif cash + savings >= 5000:
+            st.info(
+                "You managed some money well. "
+                "Next month, try planning your expenses earlier."
+            )
+
+        else:
+            st.warning(
+                "Most of your salary has been used. "
+                "Try building a budget before spending next month."
+            )
+
+        if st.button("🔄 Play the Story Again", use_container_width=True):
 
             for key in [
-                "l4_started",
-                "l4_cash",
-                "l4_savings",
-                "l4_paid",
-                "l4_purchases",
-                "l4_emergency",
-                "l4_emergency_paid"
+                "l4_story_scene",
+                "l4_story_cash",
+                "l4_story_savings",
+                "l4_story_spent",
+                "l4_story_weekend",
+                "l4_story_paid",
+                "l4_story_emergency"
             ]:
                 del st.session_state[key]
 
