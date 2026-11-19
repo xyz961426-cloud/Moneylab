@@ -4,6 +4,7 @@ from lesson1 import lesson1
 from lesson2 import lesson2
 from lesson3 import lesson3
 from lesson4 import show_lesson4
+from lesson5 import show_lesson5
 
 st.set_page_config(page_title="MoneyLab", page_icon="💰", layout="wide")
 
@@ -45,7 +46,7 @@ st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
     "NAVIGATION",
-    ["Dashboard", "Money Basics", "Life Simulator", "Investment Lab", "Progress", "Lesson 1", "Lesson 2", "Lesson 3" , "Lesson 4"]
+    ["Dashboard", "Money Basics", "Life Simulator", "Investment Lab", "Progress", "Lesson 1", "Lesson 2", "Lesson 3" , "Lesson 4" , "Lesson 5"]
 )
 
 st.sidebar.markdown("---")
@@ -199,6 +200,9 @@ elif page == "Lesson 3":
 elif page == "Lesson 4":
     show_lesson4()
     
+ elif page == "Lesson 5":
+    show_lesson5()
+     
 elif page == "Progress":
     st.title("🏆 Progress")
 
