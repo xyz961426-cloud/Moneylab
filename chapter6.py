@@ -565,16 +565,3 @@ def show_chapter6():
 
 </codeblock>
 
----
-
-### Step 2
-
-1. Open your GitHub repository.
-2. Click **Add file → Create new file**.
-3. Name it `chapter6.py`.
-4. Paste the entire code above.
-5. Commit the file.
-
-<text color="#D97706" weight="medium">Don't modify `app.py` yet.</text> We'll connect all chapters together once we've created them.
-
-Tell me **Done** when `chapter6.py` is saved, and we'll move to Chapter 7.
