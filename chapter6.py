@@ -1,4 +1,3 @@
-
 import streamlit as st
 import plotly.graph_objects as go
 
@@ -63,9 +62,7 @@ def show_chapter6():
         ]
     )
 
-    # -------------------------------------------------
     # LESSON 21
-    # -------------------------------------------------
 
     if lesson == "Lesson 21 — What Is a Bond?":
 
@@ -184,9 +181,7 @@ def show_chapter6():
             }
         ])
 
-    # -------------------------------------------------
     # LESSON 22
-    # -------------------------------------------------
 
     elif lesson == "Lesson 22 — How Bond Interest Works":
 
@@ -248,8 +243,8 @@ def show_chapter6():
         fig = go.Figure()
 
         fig.add_trace(go.Bar(
-            x=["Year 1", "Year 2", "Year 3", "Year 4", "Year 5"],
-            y=[annual_coupon] * 5,
+            x=[f"Year {i}" for i in range(1, years + 1)],
+            y=[annual_coupon] * years,
             name="Annual coupon"
         ))
 
@@ -302,9 +297,7 @@ def show_chapter6():
             }
         ])
 
-    # -------------------------------------------------
     # LESSON 23
-    # -------------------------------------------------
 
     elif lesson == "Lesson 23 — Why Bond Prices Change":
 
@@ -366,8 +359,8 @@ def show_chapter6():
 
         original_coupon = face_value * coupon_rate / 100
 
-        # Simplified illustration: perpetuity-like price approximation.
-        # This is NOT an actual bond valuation formula.
+        # Simplified illustrative perpetuity-like price approximation.
+        # This is not an actual finite-maturity bond valuation.
 
         if market_rate > 0:
             simplified_price = original_coupon / (market_rate / 100)
@@ -427,9 +420,7 @@ def show_chapter6():
             }
         ])
 
-    # -------------------------------------------------
     # LESSON 24
-    # -------------------------------------------------
 
     elif lesson == "Lesson 24 — Bond Risks & Types":
 
@@ -561,7 +552,3 @@ def show_chapter6():
 
         </div>
         """, unsafe_allow_html=True)
-
-
-</codeblock>
-
