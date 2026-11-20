@@ -8,6 +8,7 @@ from lesson4 import show_lesson4
 from lesson5 import show_lesson5
 from lesson6 import show_lesson6
 from lesson7 import lesson7
+from lesson8 import lesson8
 
 st.set_page_config(page_title="MoneyLab", page_icon="💰", layout="wide")
 
@@ -72,7 +73,8 @@ pages = [
     "Lesson 4",
     "Lesson 5",
     "Lesson 6",
-    "Lesson 7"
+    "Lesson 7",
+    "Lesson 8"
 ]
 
 if "navigation" not in st.session_state:
@@ -454,6 +456,10 @@ elif page == "Lesson 6":
 elif page == "Lesson 7":
     lesson7()
 
+
+elif page == "Lesson 8":
+    lesson8()
+    
 # PROGRESS
 elif page == "Progress":
 
