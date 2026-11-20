@@ -1,3 +1,4 @@
+
 import streamlit as st
 import plotly.graph_objects as go
 from lesson1 import lesson1
@@ -9,6 +10,11 @@ from lesson6 import show_lesson6
 
 st.set_page_config(page_title="MoneyLab", page_icon="💰", layout="wide")
 
+# NAVIGATION CALLBACK
+def go_to_page(target):
+    st.session_state.navigation = target
+
+# DESIGN
 st.markdown("""
 <style>
 .stApp {
@@ -34,75 +40,278 @@ div[data-testid="stMetric"] {
 }
 .stButton button {
     border-radius: 10px;
+    min-height: 45px;
 }
 h1, h2, h3 {
     color: #f1f5f9;
 }
+.learning-card {
+    background: #111b2c;
+    border: 1px solid #23324a;
+    padding: 22px;
+    border-radius: 16px;
+}
 </style>
 """, unsafe_allow_html=True)
 
+# SIDEBAR
 st.sidebar.markdown("# 💰 MoneyLab")
 st.sidebar.caption("LEARN MONEY BY LIVING IT")
 st.sidebar.markdown("---")
 
+pages = [
+    "Dashboard",
+    "Money Basics",
+    "Life Simulator",
+    "Investment Lab",
+    "Progress",
+    "Lesson 1",
+    "Lesson 2",
+    "Lesson 3",
+    "Lesson 4",
+    "Lesson 5",
+    "Lesson 6"
+]
+
+if "navigation" not in st.session_state:
+    st.session_state.navigation = "Dashboard"
+
 page = st.sidebar.radio(
     "NAVIGATION",
-    ["Dashboard", "Money Basics", "Life Simulator", "Investment Lab", "Progress", "Lesson 1", "Lesson 2", "Lesson 3" , "Lesson 4" , "Lesson 5" , "Lesson 6"]
+    pages,
+    key="navigation"
 )
 
 st.sidebar.markdown("---")
 st.sidebar.caption("MoneyLab | Financial Education")
 
+# DASHBOARD
 if page == "Dashboard":
-    st.markdown("## Welcome to MoneyLab")
-    st.markdown("### Understand money. Make decisions. Build your future.")
+
+    st.markdown("""
+    <div style="
+    background:linear-gradient(135deg,#10233e,#1d4ed8);
+    padding:35px;
+    border-radius:25px;
+    border:1px solid #29476d;
+    ">
+    <div style="font-size:20px;color:#86efac;font-weight:bold;">
+    MONEYLAB
+    </div>
+
+    <h1 style="font-size:42px;">
+    Learn Money by Living It.
+    </h1>
+
+    <p style="font-size:19px;">
+    Make decisions. Learn financial skills.
+    Build a better financial future.
+    </p>
+
+    <p style="font-size:16px;color:#cbd5e1;">
+    No experience needed. Start from the beginning.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("")
+
+    st.markdown("## 🌱 Start Your Learning Journey")
+
+    st.write("""
+    New to finance? Start with Lesson 1.
+
+    MoneyLab teaches you through stories, decisions,
+    simulations and practical explanations.
+    """)
+
+    st.button(
+        "🚀 Start Learning from Lesson 1",
+        key="start_learning",
+        on_click=go_to_page,
+        args=("Lesson 1",),
+        use_container_width=True
+    )
+
     st.markdown("---")
 
-    a, b, c = st.columns(3)
-    a.metric("Virtual Capital", "$10,000", "Practice money")
-    b.metric("Lessons Completed", "0 / 35", "Start learning")
-    c.metric("Current Level", "Beginner", "Level 1")
+    # LEARNING ROADMAP
+    st.markdown("## 🗺️ Your Learning Path")
 
-    st.markdown("### Your learning journey")
-    st.progress(0)
-    st.caption("0% complete — your financial journey begins here.")
+    st.write(
+        "Follow the lessons in order. Each chapter introduces "
+        "financial ideas through practical experiences."
+    )
+
+    # LESSON 1
+    with st.container(border=True):
+        st.markdown("### 📘 Lesson 1")
+        st.write("Begin your financial learning journey.")
+        st.button(
+            "Open Lesson 1 →",
+            key="dash_l1",
+            on_click=go_to_page,
+            args=("Lesson 1",)
+        )
+
+    # LESSON 2
+    with st.container(border=True):
+        st.markdown("### 📘 Lesson 2")
+        st.write("Continue building your financial understanding.")
+        st.button(
+            "Open Lesson 2 →",
+            key="dash_l2",
+            on_click=go_to_page,
+            args=("Lesson 2",)
+        )
+
+    # LESSON 3
+    with st.container(border=True):
+        st.markdown("### 📘 Lesson 3")
+        st.write("Continue your financial education.")
+        st.button(
+            "Open Lesson 3 →",
+            key="dash_l3",
+            on_click=go_to_page,
+            args=("Lesson 3",)
+        )
+
+    # LESSON 4
+    with st.container(border=True):
+        st.markdown("### 🛒 Lesson 4 — Smart Spending")
+        st.write(
+            "Learn to distinguish needs, wants and luxuries, "
+            "and make your own spending decisions."
+        )
+        st.button(
+            "Open Lesson 4 →",
+            key="dash_l4",
+            on_click=go_to_page,
+            args=("Lesson 4",)
+        )
+
+    # LESSON 5
+    with st.container(border=True):
+        st.markdown("### 🚨 Lesson 5 — The Emergency Trap")
+        st.write(
+            "Explore emergency funds, borrowing, interest "
+            "and the consequences of financial decisions."
+        )
+        st.button(
+            "Open Lesson 5 →",
+            key="dash_l5",
+            on_click=go_to_page,
+            args=("Lesson 5",)
+        )
+
+    # LESSON 6
+    with st.container(border=True):
+        st.markdown("### 📈 Lesson 6 — The Investing Race")
+        st.write(
+            "Explore compound growth, investment risk "
+            "and how time affects investing."
+        )
+        st.button(
+            "Open Lesson 6 →",
+            key="dash_l6",
+            on_click=go_to_page,
+            args=("Lesson 6",)
+        )
 
     st.markdown("---")
-    st.markdown("## Explore MoneyLab")
 
-    x, y = st.columns(2)
+    # HOW MONEYLAB WORKS
+    st.markdown("## 🎓 How MoneyLab Works")
 
-    with x:
-        st.markdown("### 🏦 Money Basics")
-        st.write("Understand income, expenses, saving, inflation and how money works.")
-        st.markdown("### 🌎 Life Simulator")
-        st.write("Make real-life financial decisions using a virtual monthly salary.")
+    a, b = st.columns(2)
 
-    with y:
-        st.markdown("### 📈 Investment Lab")
-        st.write("Experiment with compound growth, contributions and investment risk.")
-        st.markdown("### 🧠 Decision Room")
-        st.write("Explore financial choices and discover their consequences.")
+    with a:
+        st.markdown("### 📖 Learn")
+        st.write(
+            "Understand financial concepts through "
+            "stories and simple explanations."
+        )
+
+        st.markdown("### 🧠 Decide")
+        st.write(
+            "Make your own financial decisions "
+            "in interactive situations."
+        )
+
+    with b:
+        st.markdown("### 🎮 Experience")
+        st.write(
+            "Explore what happens when you make "
+            "different financial choices."
+        )
+
+        st.markdown("### 💡 Understand")
+        st.write(
+            "Learn from consequences and apply "
+            "your knowledge to real life."
+        )
 
     st.markdown("---")
-    st.markdown("## Today's Challenge")
+
+    # PRACTICE
+    st.markdown("## 🎮 Practice Your Skills")
+
+    a, b = st.columns(2)
+
+    with a:
+        with st.container(border=True):
+            st.markdown("### 🌎 Life Simulator")
+            st.write(
+                "Practice managing income, expenses "
+                "and monthly financial decisions."
+            )
+            st.button(
+                "Enter Life Simulator →",
+                key="dash_sim",
+                on_click=go_to_page,
+                args=("Life Simulator",),
+                use_container_width=True
+            )
+
+    with b:
+        with st.container(border=True):
+            st.markdown("### 📈 Investment Lab")
+            st.write(
+                "Experiment with hypothetical growth, "
+                "contributions and investment risk."
+            )
+            st.button(
+                "Enter Investment Lab →",
+                key="dash_inv",
+                on_click=go_to_page,
+                args=("Investment Lab",),
+                use_container_width=True
+            )
+
+    st.markdown("---")
+
+    st.markdown("## 💡 Today's Financial Question")
 
     st.info(
-        "Why can someone earning $10,000 per month still be financially broke?"
+        "Why can someone earning a high income still "
+        "struggle financially?"
     )
 
-    st.markdown("### Start with a simple principle")
     st.write(
-        "Income is how much money you earn. Wealth is what you build "
-        "and retain over time. Spending, saving, investing and risk "
-        "management influence your financial future."
+        "Think about spending, debt, saving, financial habits "
+        "and the difference between income and wealth."
     )
 
+# MONEY BASICS
 elif page == "Money Basics":
+
     st.title("🏦 Money Basics")
     st.markdown("### Lesson 1 — Purchasing Power")
 
-    st.write("Inflation can reduce the amount of goods and services money buys.")
+    st.write(
+        "Inflation can reduce the amount of goods "
+        "and services money buys."
+    )
 
     money = st.slider("Starting money ($)", 100, 10000, 1000, 100)
     inflation = st.slider("Annual inflation (%)", 0.0, 20.0, 5.0)
@@ -113,7 +322,9 @@ elif page == "Money Basics":
     st.metric("Future purchasing power", f"${future:,.2f}")
     st.caption("Illustration assuming constant inflation, not a forecast.")
 
+# LIFE SIMULATOR
 elif page == "Life Simulator":
+
     st.title("🌎 Life Simulator")
     st.markdown("### Manage your virtual monthly salary")
 
@@ -128,6 +339,7 @@ elif page == "Life Simulator":
     remaining = salary - expenses
 
     a, b, c = st.columns(3)
+
     a.metric("Income", f"${salary:,.0f}")
     b.metric("Expenses", f"${expenses:,.0f}")
     c.metric("Remaining", f"${remaining:,.0f}")
@@ -143,15 +355,35 @@ elif page == "Life Simulator":
         st.metric("Savings rate", f"{remaining/salary*100:.1f}%")
 
     fig = go.Figure(data=[go.Pie(
-        labels=["Housing", "Food", "Transport", "Entertainment", "Other", "Remaining"],
-        values=[housing, food, transport, entertainment, other, max(remaining, 0)],
+        labels=[
+            "Housing",
+            "Food",
+            "Transport",
+            "Entertainment",
+            "Other",
+            "Remaining"
+        ],
+        values=[
+            housing,
+            food,
+            transport,
+            entertainment,
+            other,
+            max(remaining, 0)
+        ],
         hole=0.6
     )])
 
-    fig.update_layout(template="plotly_dark", paper_bgcolor="#080d18")
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor="#080d18"
+    )
+
     st.plotly_chart(fig, use_container_width=True)
 
+# INVESTMENT LAB
 elif page == "Investment Lab":
+
     st.title("📈 Investment Lab")
     st.markdown("### Explore hypothetical compound growth")
 
@@ -171,6 +403,7 @@ elif page == "Investment Lab":
     contributed = initial + monthly * years * 12
 
     a, b, c = st.columns(3)
+
     a.metric("Simulated Value", f"${balance:,.2f}")
     b.metric("Total Contributed", f"${contributed:,.2f}")
     c.metric("Illustrative Growth", f"${balance-contributed:,.2f}")
@@ -187,36 +420,49 @@ elif page == "Investment Lab":
     )
 
     st.plotly_chart(fig, use_container_width=True)
-    st.warning("Assumed returns are not guaranteed. Real investments can lose money.")
 
+    st.warning(
+        "Assumed returns are not guaranteed. Real investments can lose money."
+    )
+
+# LESSON 1
 elif page == "Lesson 1":
     lesson1()
 
+# LESSON 2
 elif page == "Lesson 2":
     lesson2()
 
+# LESSON 3
 elif page == "Lesson 3":
     lesson3()
-    
+
+# LESSON 4
 elif page == "Lesson 4":
     show_lesson4()
-    
+
+# LESSON 5
 elif page == "Lesson 5":
     show_lesson5()
 
+# LESSON 6
 elif page == "Lesson 6":
     show_lesson6()
-        
-elif page == "Progress":
-    st.title("🏆 Progress")
 
-    a, b, c = st.columns(3)
-    a.metric("Lessons", "0")
-    b.metric("Challenges", "0")
-    c.metric("Learning XP", "0")
+# PROGRESS
+elif page == "Progress":
+
+    st.title("📊 Progress")
+
+    st.info(
+        "Progress tracking will be developed as "
+        "you continue through the MoneyLab learning journey."
+    )
+
+    st.write("Explore the lessons to build your financial knowledge.")
 
     st.progress(0)
-    st.info("Complete lessons and challenges to build your financial knowledge.")
 
+# FOOTER
 st.markdown("---")
 st.caption("MoneyLab • Learn. Experiment. Understand. Grow.")
