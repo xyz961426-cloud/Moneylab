@@ -1,14 +1,9 @@
-
 import streamlit as st
-import random
 
 def lesson7():
 
     if "l7_scene" not in st.session_state:
         st.session_state.l7_scene = 0
-
-    if "l7_choice" not in st.session_state:
-        st.session_state.l7_choice = None
 
     scene = st.session_state.l7_scene
 
@@ -16,70 +11,66 @@ def lesson7():
     <style>
     @keyframes float {
         0%,100% {transform:translateY(0px);}
-        50% {transform:translateY(-15px);}
+        50% {transform:translateY(-12px);}
+    }
+    @keyframes appear {
+        from {opacity:0;transform:translateY(15px);}
+        to {opacity:1;transform:translateY(0);}
     }
     @keyframes glow {
         0%,100% {box-shadow:0 0 5px #f59e0b;}
-        50% {box-shadow:0 0 25px #f59e0b;}
-    }
-    @keyframes appear {
-        from {opacity:0;transform:translateY(20px);}
-        to {opacity:1;transform:translateY(0);}
+        50% {box-shadow:0 0 20px #f59e0b;}
     }
     .character {
-        font-size:100px;
+        font-size:90px;
         text-align:center;
         animation:float 2s infinite;
     }
-    .scene-box {
+    .storybox {
         background:linear-gradient(135deg,#172554,#1e3a8a);
-        padding:25px;
-        border-radius:20px;
+        padding:24px;
+        border-radius:18px;
         color:white;
-        text-align:center;
-        animation:appear 0.8s;
+        animation:appear 0.7s;
     }
-    .offer {
+    .info-box {
         background:#172033;
+        padding:20px;
+        border-radius:15px;
         border:1px solid #334155;
-        padding:20px;
-        border-radius:15px;
-        margin:10px 0;
         color:white;
-        animation:appear 1s;
+        animation:appear 0.7s;
     }
-    .warning {
+    .warning-box {
         background:#451a03;
+        padding:20px;
+        border-radius:15px;
         border:2px solid #f59e0b;
-        padding:20px;
-        border-radius:15px;
         color:#fde68a;
-        animation:glow 3s infinite;
     }
-    .money {
-        font-size:30px;
-        font-weight:bold;
-        text-align:center;
-        padding:20px;
-        color:#86efac;
+    .success-box {
         background:#14532d;
+        padding:20px;
         border-radius:15px;
+        color:#dcfce7;
     }
-    .danger {
+    .loss-box {
+        background:#450a0a;
+        padding:20px;
+        border-radius:15px;
+        color:#fecaca;
+    }
+    .money-box {
+        background:#123524;
+        padding:20px;
+        border-radius:15px;
+        text-align:center;
+        color:#86efac;
         font-size:25px;
         font-weight:bold;
-        text-align:center;
-        padding:20px;
-        color:#fca5a5;
-        background:#450a0a;
-        border-radius:15px;
     }
-    .story {
-        background:#0f172a;
-        border-left:5px solid #38bdf8;
-        padding:20px;
-        border-radius:12px;
-        color:white;
+    .scene-heading {
+        animation:appear 0.7s;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -88,144 +79,305 @@ def lesson7():
     st.caption("MoneyLab • Learn Money by Living It")
 
     st.progress((scene + 1) / 8)
+    st.caption(f"Scene {scene + 1} of 8")
 
-    # SCENE 0
+    # SCENE 0: CONNECTION WITH LESSON 6
+
     if scene == 0:
 
-        st.markdown('<div class="character">🧑‍💻</div>',
+        st.markdown('<div class="character">🧑</div>',
                     unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="scene-box">
-        <h2>Alex enters the investment world</h2>
-        <h3>He has ₹10,000 to invest.</h3>
+        <div class="storybox">
+        <h2>Meet Alex again!</h2>
+        <h3>Alex is ready to invest.</h3>
         </div>
         """, unsafe_allow_html=True)
 
         st.write("""
-        In Lesson 6, Alex learned that investments can help
+        In Lesson 6, Alex learned that investing can help
         money grow over time.
 
-        But today, he discovers something new.
+        He now understands that investing can be a way
+        to build wealth.
 
-        **Investments can also lose money.**
+        But today, Alex has a new question:
         """)
 
-        st.info("Lesson 6 taught growth. Lesson 7 teaches risk.")
-
-    # SCENE 1
-    elif scene == 1:
-
-        st.markdown('<div class="character">💼</div>',
-                    unsafe_allow_html=True)
-
-        st.markdown("## Three investment offers")
-
-        st.write("Alex receives three different offers.")
-
         st.markdown("""
-        <div class="offer">
-        <h3>🛡️ Offer A — Lower Risk</h3>
-        <p>Potentially lower returns and relatively
-        lower risk, depending on the product.</p>
-        </div>
-
-        <div class="offer">
-        <h3>📈 Offer B — Market Investment</h3>
-        <p>Returns can rise or fall.
-        The value may change with the market.</p>
-        </div>
-
-        <div class="offer">
-        <h3>🚀 Offer C — The Big Promise</h3>
-        <p>Someone promises 30% profit every month
-        with absolutely no risk.</p>
+        <div class="warning-box">
+        <h3>Can investments also make me lose money?</h3>
         </div>
         """, unsafe_allow_html=True)
 
-        st.warning("Which offer sounds the most dangerous?")
+        st.markdown("### The new problem")
 
-    # SCENE 2
-    elif scene == 2:
+        st.write("""
+        Alex has ₹10,000.
 
-        st.markdown('<div class="character">⚠️</div>',
+        He wants to invest it, but he doesn't understand
+        what could happen if the investment performs badly.
+
+        Before investing, he needs to learn something
+        important: **risk**.
+        """)
+
+        st.info("""
+        Lesson 6: How money can grow.
+
+        Lesson 7: What can go wrong when we invest?
+        """)
+
+    # SCENE 1: UNDERSTANDING RISK
+
+    elif scene == 1:
+
+        st.markdown('<div class="character">⚖️</div>',
                     unsafe_allow_html=True)
 
         st.markdown("## What is investment risk?")
 
+        st.write("""
+        Imagine you invest ₹10,000 in an investment
+        whose value changes with the market.
+        """)
+
         st.markdown("""
-        <div class="story">
-        Risk means that the outcome is uncertain.
-
-        You might earn money.
-
-        You might earn less than expected.
-
-        You might lose some or all of the money you invested,
-        depending on the investment.
+        <div class="money-box">
+        Starting Investment: ₹10,000
         </div>
         """, unsafe_allow_html=True)
 
-        st.write("### Imagine investing ₹10,000")
+        st.markdown("### Three possible outcomes")
 
         st.markdown("""
-        <div class="money">Possible Gain: +₹2,000</div>
-        <br>
-        <div class="danger">Possible Loss: -₹2,000</div>
+        <div class="success-box">
+        <h3>📈 Outcome A</h3>
+        <h2>₹12,000</h2>
+        <p>Your investment increases.</p>
+        </div>
         """, unsafe_allow_html=True)
 
-        st.write("""
-        Neither outcome is guaranteed.
+        st.markdown("""
+        <div class="info-box">
+        <h3>➖ Outcome B</h3>
+        <h2>₹10,000</h2>
+        <p>Your investment stays at the same value.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-        **Risk does not mean loss will definitely happen.
-        It means the outcome is uncertain.**
+        st.markdown("""
+        <div class="loss-box">
+        <h3>📉 Outcome C</h3>
+        <h2>₹8,000</h2>
+        <p>Your investment decreases.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### Why can this happen?")
+
+        st.write("""
+        Investment prices can change because of:
+
+        - Company profits or losses.
+        - Economic conditions.
+        - Interest rates.
+        - Investor expectations.
+        - Unexpected events.
+
         """)
 
-    # SCENE 3
-    elif scene == 3:
+        st.markdown("""
+        <div class="warning-box">
+        <b>Risk means uncertainty about an outcome.</b>
 
-        st.markdown('<div class="character">📊</div>',
+        An investment may perform better or worse
+        than expected. Risk does not mean that a loss
+        will definitely happen.
+        </div>
+        """, unsafe_allow_html=True)
+
+    # SCENE 2: DIFFERENT INVESTMENTS
+
+    elif scene == 2:
+
+        st.markdown('<div class="character">🏦</div>',
                     unsafe_allow_html=True)
 
-        st.markdown("## Return is not guaranteed")
+        st.markdown("## Different investments, different risks")
 
         st.write("""
-        Alex invests ₹10,000 in a market investment.
-
-        Let's see three possible outcomes after a period
-        of time.
+        Alex discovers that not every investment
+        behaves in the same way.
         """)
 
         st.markdown("""
-        <div class="offer">
-        <h3>🟢 Scenario 1</h3>
-        <h2>₹12,000</h2>
-        <p>His investment increased by ₹2,000.</p>
-        </div>
+        <div class="info-box">
+        <h3>🛡️ Option A — Bank Deposit</h3>
 
-        <div class="offer">
-        <h3>🟡 Scenario 2</h3>
-        <h2>₹10,500</h2>
-        <p>His investment increased by ₹500.</p>
-        </div>
+        A bank deposit may offer a relatively predictable
+        interest rate, subject to the product's terms.
 
-        <div class="offer">
-        <h3>🔴 Scenario 3</h3>
-        <h2>₹8,000</h2>
-        <p>His investment decreased by ₹2,000.</p>
+        <p>Risks can include inflation, bank-related risk
+        beyond applicable protections, and restrictions
+        on withdrawals.</p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.caption("Illustrative outcomes, not a forecast.")
+        st.markdown("""
+        <div class="info-box">
+        <h3>📊 Option B — Diversified Stock Fund</h3>
+
+        It invests in many companies.
+
+        <p>Its value may rise or fall with the market.
+        Diversification may reduce company-specific risk,
+        but market losses are still possible.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="info-box">
+        <h3>🚀 Option C — Single Company Stock</h3>
+
+        You invest in one company's shares.
+
+        <p>If that company performs well, the shares
+        may increase in value. If the company struggles,
+        the shares may lose significant value.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### What should Alex understand?")
 
         st.write("""
-        The same investment can have different outcomes.
+        Different investments have different risks,
+        liquidity, costs, and expected returns.
 
-        This is why investors should not assume that
-        past returns will continue in the future.
+        An investment that is relatively less risky
+        is not automatically suitable for everyone.
+
+        Alex must understand the product before
+        deciding where to put his money.
         """)
 
-    # SCENE 4
+    # SCENE 3: PROFIT AND LOSS SIMULATOR
+
+    elif scene == 3:
+
+        st.markdown('<div class="character">🎮</div>',
+                    unsafe_allow_html=True)
+
+        st.markdown("## Alex's Investment Simulator")
+
+        st.write("""
+        Alex invests ₹10,000.
+
+        Choose a possible outcome to see how his
+        investment value changes.
+        """)
+
+        outcome = st.selectbox(
+            "Choose a simulated market outcome:",
+            [
+                "Market rises by 20%",
+                "Market rises by 5%",
+                "Market falls by 20%",
+                "Market falls by 50%"
+            ],
+            key="l7_sim_choice"
+        )
+
+        if st.button("Simulate Outcome", key="l7_sim_button"):
+
+            changes = {
+                "Market rises by 20%": 0.20,
+                "Market rises by 5%": 0.05,
+                "Market falls by 20%": -0.20,
+                "Market falls by 50%": -0.50
+            }
+
+            change = changes[outcome]
+
+            result = round(10000 * (1 + change))
+
+            st.session_state.l7_sim_result = {
+                "choice": outcome,
+                "value": result,
+                "change": change
+            }
+
+        if "l7_sim_result" in st.session_state:
+
+            sim = st.session_state.l7_sim_result
+
+            if sim["choice"] == outcome:
+
+                value = sim["value"]
+
+                st.markdown("---")
+
+                if value > 10000:
+
+                    st.success("📈 The investment increased!")
+
+                    st.markdown(f"""
+                    <div class="money-box">
+                    Investment Value: ₹{value:,}
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    st.write(f"""
+                    Initial investment: ₹10,000
+
+                    Current simulated value: ₹{value:,}
+
+                    **Profit: ₹{value - 10000:,}**
+                    """)
+
+                elif value < 10000:
+
+                    st.error("📉 The investment decreased!")
+
+                    st.markdown(f"""
+                    <div class="loss-box">
+                    Investment Value: ₹{value:,}
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    st.write(f"""
+                    Initial investment: ₹10,000
+
+                    Current simulated value: ₹{value:,}
+
+                    **Loss: ₹{10000 - value:,}**
+                    """)
+
+                else:
+
+                    st.info("The investment has not changed.")
+
+                st.markdown("### What does this teach us?")
+
+                st.write("""
+                Investment returns are uncertain.
+
+                You cannot assume that an investment
+                will always increase in value.
+
+                A loss means the value of your investment
+                has decreased. If you sell at that value,
+                the loss becomes realized, before considering
+                any costs or taxes.
+                """)
+
+                st.caption(
+                    "Illustrative simulation, not a forecast."
+                )
+
+    # SCENE 4: DIVERSIFICATION
+
     elif scene == 4:
 
         st.markdown('<div class="character">🧺</div>',
@@ -236,233 +388,457 @@ def lesson7():
         st.write("""
         Alex has ₹10,000.
 
-        He is thinking about putting all his money
-        into a single company.
+        He considers investing the entire amount
+        in one company.
         """)
 
         st.markdown("""
-        <div class="danger">
-        ₹10,000 → ONE COMPANY
+        <div class="loss-box">
+        <h2>₹10,000 → One Company</h2>
         </div>
         """, unsafe_allow_html=True)
 
         st.write("""
-        If that company performs badly,
-        a large part of his investment could suffer.
+        Imagine that the company faces serious problems.
+
+        Its share price drops by 50%.
         """)
 
-        st.markdown("### What if he diversifies?")
-
         st.markdown("""
-        <div class="offer">
-        🏢 Company A — ₹2,500
-        </div>
-        <div class="offer">
-        🏢 Company B — ₹2,500
-        </div>
-        <div class="offer">
-        🏢 Company C — ₹2,500
-        </div>
-        <div class="offer">
-        🏢 Company D — ₹2,500
+        <div class="loss-box">
+        <h2>₹10,000 → ₹5,000</h2>
+        <h3>Loss: ₹5,000</h3>
         </div>
         """, unsafe_allow_html=True)
 
-        st.success("""
+        st.markdown("### What if Alex spreads the money?")
+
+        st.write("""
+        Instead of putting all ₹10,000 into one company,
+        he spreads the investment across four companies.
+        """)
+
+        st.markdown("""
+        <div class="info-box">
+        Company A: ₹2,500
+
+        Company B: ₹2,500
+
+        Company C: ₹2,500
+
+        Company D: ₹2,500
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.write("""
+        Imagine Company A loses 50%, but the other
+        three companies remain unchanged.
+        """)
+
+        st.markdown("""
+        <div class="success-box">
+        <h3>Company A</h3>
+        ₹2,500 → ₹1,250
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="info-box">
+        <h3>Companies B, C and D</h3>
+        ₹7,500 → ₹7,500
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="warning-box">
+        <h3>Combined value: ₹8,750</h3>
+
+        Initial investment: ₹10,000
+
+        Simulated loss: ₹1,250
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### What is diversification?")
+
+        st.write("""
         Diversification means spreading investments
-        across different assets instead of relying
-        on just one.
+        across different assets, companies, industries
+        or other investment types.
+
+        It can reduce the impact of one investment
+        performing badly on the entire portfolio.
         """)
 
         st.warning("""
-        Diversification can reduce concentration risk,
-        but it cannot eliminate all investment risk.
+        Diversification does not guarantee profits
+        or prevent losses. Investments can fall together,
+        particularly during market-wide declines.
         """)
 
-    # SCENE 5
+    # SCENE 5: RISK AND RETURN
+
     elif scene == 5:
 
-        st.markdown('<div class="character">🎮</div>',
+        st.markdown('<div class="character">⚖️</div>',
                     unsafe_allow_html=True)
 
-        st.markdown("## Alex's Risk Simulator")
+        st.markdown("## Risk and potential return")
 
-        st.write("Alex invests ₹10,000.")
+        st.write("""
+        Alex notices something interesting.
 
-        outcome = st.selectbox(
-            "Choose a possible market outcome:",
-            [
-                "Strong Market (+20%)",
-                "Moderate Market (+5%)",
-                "Market Decline (-20%)",
-                "Severe Decline (-50%)"
-            ],
-            key="l7_simulator"
-        )
+        Some investments offer the possibility
+        of higher returns, but those returns
+        may come with greater uncertainty.
+        """)
 
-        if st.button("Simulate Outcome", key="l7_sim_button"):
+        st.markdown("""
+        <div class="info-box">
+        <h3>Option A</h3>
+        <p>Lower potential return, with relatively
+        lower risk in some circumstances.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-            outcomes = {
-                "Strong Market (+20%)": 12000,
-                "Moderate Market (+5%)": 10500,
-                "Market Decline (-20%)": 8000,
-                "Severe Decline (-50%)": 5000
-            }
+        st.markdown("""
+        <div class="info-box">
+        <h3>Option B</h3>
+        <p>Higher potential return, with the possibility
+        of larger losses and greater uncertainty.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-            st.session_state.l7_sim_result = outcomes[outcome]
+        st.markdown("### Does higher risk guarantee higher returns?")
 
-        if "l7_sim_result" in st.session_state:
+        st.error("No!")
 
-            result = st.session_state.l7_sim_result
+        st.write("""
+        Taking more risk does not guarantee
+        that you will earn more money.
 
-            if result > 10000:
-                st.success(f"Investment Value: ₹{result:,}")
-                st.write(f"Profit: ₹{result - 10000:,}")
+        An investment can have high risk and still
+        produce poor returns or losses.
+        """)
 
-            elif result < 10000:
-                st.error(f"Investment Value: ₹{result:,}")
-                st.write(f"Loss: ₹{10000 - result:,}")
+        st.markdown("""
+        <div class="warning-box">
+        <h3>Important principle</h3>
 
-            else:
-                st.info("No profit or loss.")
+        Higher potential returns often involve higher risk,
+        but the relationship is not a guarantee.
 
-        st.caption("Simulated outcomes. Not predictions.")
+        Risk is not a promise of reward.
+        </div>
+        """, unsafe_allow_html=True)
 
-    # SCENE 6
+        st.markdown("### What should an investor consider?")
+
+        st.markdown("""
+        - How much money could I lose?
+        - Do I understand this investment?
+        - When might I need the money?
+        - Can I handle a loss?
+        - Am I investing based on facts or excitement?
+        """)
+
+    # SCENE 6: SCAM INVESTIGATION
+
     elif scene == 6:
 
         st.markdown('<div class="character">🚨</div>',
                     unsafe_allow_html=True)
 
-        st.markdown("## The Guaranteed Profit Trap")
+        st.markdown("## Alex investigates a suspicious offer")
 
         st.markdown("""
-        <div class="warning">
+        <div class="warning-box">
         <h2>30% PROFIT EVERY MONTH!</h2>
         <h3>ZERO RISK!</h3>
-        <h3>YOUR MONEY IS 100% SAFE!</h3>
+        <h3>100% GUARANTEED!</h3>
         </div>
         """, unsafe_allow_html=True)
 
         st.write("""
-        Alex receives this message from a stranger.
+        Alex receives a message from a stranger.
+        The stranger says:
         """)
 
         st.markdown("""
-        <div class="story">
+        <div class="info-box">
         "Send ₹10,000 today.
 
-        We guarantee ₹3,000 profit every month.
+        We will give you ₹3,000 profit every month.
 
-        You cannot lose money!"
+        You cannot lose money.
+
+        Send it now before the offer expires!"
         </div>
         """, unsafe_allow_html=True)
 
-        st.write("### 🚩 Warning signs")
+        st.markdown("### Let's investigate the offer")
 
         st.markdown("""
-        - Guaranteed unusually high returns.
-        - Claims of zero risk.
-        - Pressure to send money immediately.
-        - No clear explanation of how the investment works.
-        - Unverified company or person.
+        <div class="warning-box">
+        🚩 Warning sign 1
+
+        Unusually high promised returns.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="warning-box">
+        🚩 Warning sign 2
+
+        Claims that there is absolutely no risk.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="warning-box">
+        🚩 Warning sign 3
+
+        Pressure to send money immediately.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="warning-box">
+        🚩 Warning sign 4
+
+        No independently verified information
+        about the business or investment.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### What should Alex do?")
+
+        st.write("""
+        He should not send money just because
+        someone promises high returns.
+
+        He should independently verify the person,
+        company and product, check relevant
+        regulatory information, and understand
+        exactly how the investment works.
         """)
 
         st.error("""
-        High guaranteed returns with no risk are a major
-        warning sign of a potential scam.
+        Guaranteed unusually high returns with
+        no risk are a major warning sign.
 
-        Always independently verify the person,
-        company and investment before sending money.
+        Never rush into an investment because
+        someone is pressuring you.
         """)
 
-    # SCENE 7
+    # SCENE 7: FINAL QUIZ WITH FEEDBACK
+
     elif scene == 7:
 
-        st.markdown('<div class="character">🏆</div>',
+        st.markdown('<div class="character">🧠</div>',
                     unsafe_allow_html=True)
 
-        st.markdown("## 🧠 Final Challenge")
+        st.markdown("## Final Challenge")
+
+        st.write("""
+        Alex wants to check whether he understands
+        what he has learned.
+
+        Answer all three questions.
+        """)
 
         q1 = st.radio(
             "1. What does investment risk mean?",
             [
-                "Profit is guaranteed",
-                "The outcome is uncertain",
-                "The investor always loses money"
+                "A. Profit is always guaranteed",
+                "B. The outcome is uncertain",
+                "C. Investors always lose money"
             ],
-            key="l7_q1"
+            key="l7_final_q1"
         )
 
         q2 = st.radio(
             "2. What is diversification?",
             [
-                "Investing everything in one company",
-                "Borrowing money to invest",
-                "Spreading investments across different assets"
+                "A. Putting all money in one company",
+                "B. Borrowing money to invest",
+                "C. Spreading investments across assets"
             ],
-            key="l7_q2"
+            key="l7_final_q2"
         )
 
         q3 = st.radio(
-            "3. Which statement is a warning sign?",
+            "3. Which is a major warning sign?",
             [
-                "Returns can vary",
-                "All investments have different risks",
-                "30% monthly return guaranteed with zero risk"
+                "A. Returns may change",
+                "B. Investments carry different risks",
+                "C. 30% monthly profit guaranteed with zero risk"
             ],
-            key="l7_q3"
+            key="l7_final_q3"
         )
 
-        if st.button("Check My Answers", key="l7_quiz_check"):
+        current_answers = (q1, q2, q3)
 
-            score = 0
+        if st.button("Check My Answers", key="l7_final_check"):
 
-            if q1 == "The outcome is uncertain":
-                score += 1
+            st.session_state.l7_checked_answers = current_answers
 
-            if q2 == "Spreading investments across different assets":
-                score += 1
+        if (
+            "l7_checked_answers" in st.session_state
+            and st.session_state.l7_checked_answers == current_answers
+        ):
 
-            if q3 == "30% monthly return guaranteed with zero risk":
-                score += 1
+            answers = st.session_state.l7_checked_answers
 
-            st.session_state.l7_score = score
+            correct = [
+                "B. The outcome is uncertain",
+                "C. Spreading investments across assets",
+                "C. 30% monthly profit guaranteed with zero risk"
+            ]
 
-        if "l7_score" in st.session_state:
+            explanations = {
 
-            score = st.session_state.l7_score
+                1: {
+                    "A. Profit is always guaranteed":
+                    (
+                        "This is incorrect because investments "
+                        "do not guarantee profit. Their outcomes "
+                        "can be uncertain."
+                    ),
+
+                    "B. The outcome is uncertain":
+                    (
+                        "Correct! Risk refers to uncertainty "
+                        "about investment outcomes. An investment "
+                        "may gain or lose value."
+                    ),
+
+                    "C. Investors always lose money":
+                    (
+                        "This is incorrect. Risk does not mean "
+                        "that a loss is certain. Investments "
+                        "can gain, lose or sometimes remain "
+                        "at a similar value."
+                    )
+                },
+
+                2: {
+                    "A. Putting all money in one company":
+                    (
+                        "This is concentration, not diversification. "
+                        "It leaves your investment more exposed "
+                        "to the performance of one company."
+                    ),
+
+                    "B. Borrowing money to invest":
+                    (
+                        "Borrowing to invest is a financial "
+                        "strategy that can increase risk. "
+                        "It is not diversification."
+                    ),
+
+                    "C. Spreading investments across assets":
+                    (
+                        "Correct! Diversification spreads money "
+                        "across different investments to reduce "
+                        "concentration risk. It cannot eliminate "
+                        "all risks."
+                    )
+                },
+
+                3: {
+                    "A. Returns may change":
+                    (
+                        "This is normal for many investments. "
+                        "Variable returns alone are not a scam sign."
+                    ),
+
+                    "B. Investments carry different risks":
+                    (
+                        "This is a normal financial fact. "
+                        "Different investment products have "
+                        "different risks."
+                    ),
+
+                    "C. 30% monthly profit guaranteed with zero risk":
+                    (
+                        "Correct! Unusually high guaranteed "
+                        "returns combined with claims of zero "
+                        "risk are a major warning sign. "
+                        "Investigate independently before "
+                        "sending any money."
+                    )
+                }
+            }
+
+            score = sum(
+                answers[i] == correct[i]
+                for i in range(3)
+            )
 
             st.markdown("---")
+
+            st.subheader(f"Your score: {score}/3")
+
+            for i, answer in enumerate(answers):
+
+                question_number = i + 1
+
+                if answer == correct[i]:
+                    st.success(
+                        f"Question {question_number}: Correct!"
+                    )
+                else:
+                    st.error(
+                        f"Question {question_number}: Incorrect."
+                    )
+
+                st.markdown(
+                    f"**Your answer:** {answer}"
+                )
+
+                st.markdown(
+                    f"**Correct answer:** {correct[i]}"
+                )
+
+                st.write(
+                    explanations[question_number][answer]
+                )
+
+                st.markdown("---")
 
             if score == 3:
-                st.success("🏆 Excellent! 3/3")
+
+                st.success("""
+                Excellent! Alex understands
+                investment risk.
+                """)
 
             elif score == 2:
-                st.success(f"Good work! {score}/3")
+
+                st.info("""
+                Good work! Review the explanations
+                for the question you missed.
+                """)
 
             else:
-                st.info(f"You scored {score}/3. Review the lesson.")
 
-            st.markdown("### What you learned")
-
-            st.markdown("""
-            - Investment risk and uncertainty.
-            - Potential profits and losses.
-            - Why returns are not guaranteed.
-            - Diversification.
-            - Recognizing suspicious investment promises.
-            """)
-
-            st.markdown("---")
+                st.info("""
+                Review the explanations above.
+                Understanding why answers are correct
+                is more important than memorizing them.
+                """)
 
             st.markdown("""
-            <div class="scene-box">
+            <div class="storybox">
             <h2>Lesson 7 Completed!</h2>
-            <h3>Alex now understands that investing
-            isn't only about making money.</h3>
-            <p>It's also about understanding what
-            could go wrong.</p>
+
+            <h3>Alex learned that investing is not
+            only about making money.</h3>
+
+            <p>It is also about understanding risks,
+            protecting yourself and making informed decisions.</p>
+
             <h2>🔓 Next: Lesson 8</h2>
             </div>
             """, unsafe_allow_html=True)
@@ -474,14 +850,20 @@ def lesson7():
     col1, col2 = st.columns(2)
 
     with col1:
+
         if scene > 0:
-            if st.button("⬅️ Previous Scene", key="l7_previous"):
+
+            if st.button("⬅️ Previous Scene", key="l7_prev"):
+
                 st.session_state.l7_scene -= 1
                 st.rerun()
 
     with col2:
+
         if scene < 7:
+
             if st.button("Next Scene ➡️", key="l7_next"):
+
                 st.session_state.l7_scene += 1
                 st.rerun()
 
