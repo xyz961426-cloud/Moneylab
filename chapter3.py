@@ -1,932 +1,1334 @@
 import streamlit as st
+import plotly.graph_objects as go
 
-def show_chapter3():
-    st.title("🏦 Chapter 3: Building Your Financial Foundation")
-    st.caption("MoneyLab • Lessons 9–12")
+# ============================================================
+# MONEYLAB — CHAPTER 3 REBUILT
+# Building Your Financial Foundation
+# Lessons 9–12
+# ============================================================
 
-    st.markdown("""
-    <style>
-    .money-story {
-        padding: 18px;
-        border-radius: 15px;
-        background: linear-gradient(135deg, #14213d, #243b55);
-        color: white;
-        margin: 12px 0;
-    }
-    .money-highlight {
-        padding: 14px;
-        border-radius: 12px;
-        background: #e9f5ff;
-        color: #102a43;
-        margin: 10px 0;
-    }
-    .money-warning {
-        padding: 14px;
-        border-radius: 12px;
-        background: #fff3cd;
-        color: #5c4500;
-        margin: 10px 0;
-    }
-    .money-success {
-        padding: 14px;
-        border-radius: 12px;
-        background: #e6f4ea;
-        color: #14532d;
-        margin: 10px 0;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+LESSONS = [
+    "Lesson 9 — Build Your Financial Plan",
+    "Lesson 10 — Master Your Cash Flow",
+    "Lesson 11 — Protect Yourself",
+    "Lesson 12 — Spend With Intelligence",
+]
 
-    lessons = {
-        "Lesson 9 — Your First Financial Plan": 9,
-        "Lesson 10 — Income, Expenses & Cash Flow": 10,
-        "Lesson 11 — The Emergency Fund": 11,
-        "Lesson 12 — Needs, Wants & Smart Spending": 12,
+def init_state():
+    defaults = {
+        "c3_new_lesson": 0,
+        "c3_new_completed": set(),
+        "c3_new_quiz9": None,
+        "c3_new_quiz10": None,
+        "c3_new_quiz11": None,
+        "c3_new_quiz12": None,
+        "c3_new_decision": None,
+        "c3_new_budget_income": 30000,
+        "c3_new_goal": 40000,
     }
 
-    selected = st.selectbox(
-        "📚 Chapter 3 lessons",
-        list(lessons.keys())
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def money(value):
+    return f"₹{value:,.0f}"
+
+
+def hero(title, subtitle, emoji):
+    st.markdown(
+        f"""
+        <div class="c3-hero">
+            <div class="c3-hero-emoji">{emoji}</div>
+            <h1>{title}</h1>
+            <p>{subtitle}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    lesson_number = lessons[selected]
 
-    st.progress((lesson_number - 8) / 4)
-
-    if lesson_number == 9:
-        lesson9()
-    elif lesson_number == 10:
-        lesson10()
-    elif lesson_number == 11:
-        lesson11()
-    elif lesson_number == 12:
-        lesson12()
-
-
-# =========================================================
-# LESSON 9 — YOUR FIRST FINANCIAL PLAN
-# =========================================================
-
-def lesson9():
-    st.header("🎯 Lesson 9: Your First Financial Plan")
-
-    st.markdown("""
-    <div class="money-story">
-    <h3>Alex has a new problem...</h3>
-    Alex has learned how money works, why investing involves risk,
-    and how to make investment decisions.
-
-    But he still has no plan for his own money.
-
-    He wants a laptop, wants to save for the future, and wants to
-    avoid financial problems. He doesn't know where to begin.
-
-    <b>He needs a financial plan.</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("1. What is a financial plan?")
-
-    st.write("""
-    A financial plan is a strategy for managing your money to achieve
-    financial goals.
-
-    It helps you decide:
-    - What you want to achieve.
-    - How much money you need.
-    - When you need it.
-    - How you will save or earn that money.
-    - What you may need to change to reach your goal.
-    """)
-
-    st.markdown("""
-    <div class="money-highlight">
-    <b>A financial goal without a plan is just a wish.</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("2. Alex's goals")
-
-    st.write("""
-    Alex has three goals. Each goal has a different time horizon.
-    """)
-
-    goals = [
-        ("Short-term", "Buy headphones", "6 months"),
-        ("Medium-term", "Buy a laptop", "2 years"),
-        ("Long-term", "Build wealth for the future", "20 years"),
-    ]
-
-    for name, goal, duration in goals:
-        with st.expander(f"🗓️ {name} goal — {goal}"):
-            st.write(f"**Time horizon:** {duration}")
-            if name == "Short-term":
-                st.write("Short-term goals generally need money relatively soon. "
-                         "Protecting the money from large losses may matter more than growth.")
-            elif name == "Medium-term":
-                st.write("Medium-term goals require balancing growth, risk and the deadline.")
-            else:
-                st.write("Long-term goals may allow more time for growth, but investment "
-                         "risk still matters and returns are never guaranteed.")
-
-    st.subheader("3. Make a goal measurable")
-
-    st.write("""
-    A useful financial goal has an amount and a deadline.
-    """)
-
-    target = st.number_input(
-        "How much money do you need? (₹)",
-        min_value=0,
-        value=24000,
-        step=1000,
-        key="l9_target"
+def scene(title, story, emoji="🎬"):
+    st.markdown(
+        f"""
+        <div class="c3-scene">
+            <div class="c3-scene-emoji">{emoji}</div>
+            <h3>{title}</h3>
+            <p>{story}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    months = st.number_input(
-        "How many months do you have?",
-        min_value=1,
-        value=12,
-        step=1,
-        key="l9_months"
+
+def info_card(title, content, emoji="💡"):
+    st.markdown(
+        f"""
+        <div class="c3-card">
+            <h4>{emoji} {title}</h4>
+            <p>{content}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    monthly = target / months if months else 0
 
-    st.metric("Monthly saving required", f"₹{monthly:,.2f}")
+def animated_flow():
+    st.markdown(
+        """
+        <div class="c3-flow">
+            <div class="c3-flow-item">
+                <div>💼</div>
+                <b>Income</b>
+            </div>
+            <div class="c3-arrow">➜</div>
+            <div class="c3-flow-item">
+                <div>🧾</div>
+                <b>Expenses</b>
+            </div>
+            <div class="c3-arrow">➜</div>
+            <div class="c3-flow-item">
+                <div>🏦</div>
+                <b>Savings</b>
+            </div>
+            <div class="c3-arrow">➜</div>
+            <div class="c3-flow-item">
+                <div>🎯</div>
+                <b>Goals</b>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    st.write("""
-    This calculation assumes you save the same amount each month and
-    ignores interest, investment returns and unexpected changes.
+
+def quiz(question, options, correct, explanation, key):
+    st.markdown("### 🧠 Decision Challenge")
+    st.write(question)
+
+    selected = st.radio(
+        "Choose your answer",
+        options,
+        index=None,
+        key=key + "_choice",
+    )
+
+    if st.button("Check answer", key=key + "_check"):
+        st.session_state[key] = selected
+
+    answer = st.session_state.get(key)
+
+    if answer is not None:
+        if answer == correct:
+            st.success("Correct! " + explanation)
+        else:
+            st.error(
+                "That answer is incorrect. "
+                "The correct answer is: "
+                + correct
+            )
+            st.info(explanation)
+
+    return selected
+
+
+def completion_button(lesson_number):
+    if st.button(
+        "✅ Mark this lesson complete",
+        key=f"c3_new_finish_{lesson_number}",
+        use_container_width=True,
+    ):
+        st.session_state.c3_new_completed.add(lesson_number)
+        st.success("Lesson completed!")
+        st.balloons()
+
+
+def navigation():
+    current = st.session_state.c3_new_lesson
+
+    st.progress((current + 1) / len(LESSONS))
+
+    st.caption(
+        f"Chapter progress • Lesson {current + 1} of {len(LESSONS)}"
+    )
+
+    st.selectbox(
+        "Go to lesson",
+        LESSONS,
+        index=current,
+        key="c3_new_navigation",
+        on_change=change_lesson,
+    )
+
+    left, right = st.columns(2)
+
+    with left:
+        if st.button(
+            "⬅ Previous lesson",
+            disabled=current == 0,
+            key="c3_new_previous",
+            use_container_width=True,
+        ):
+            st.session_state.c3_new_lesson -= 1
+            st.rerun()
+
+    with right:
+        if st.button(
+            "Next lesson ➡",
+            disabled=current == 3,
+            key="c3_new_next",
+            use_container_width=True,
+        ):
+            st.session_state.c3_new_lesson += 1
+            st.rerun()
+
+
+def change_lesson():
+    st.session_state.c3_new_lesson = (
+        LESSONS.index(st.session_state.c3_new_navigation)
+    )
+
+
+def show_lesson9():
+
+    hero(
+        "Your First Financial Plan",
+        "Give your money a purpose before it disappears.",
+        "🧭",
+    )
+
+    scene(
+        "Alex's first paycheck",
+        "Alex receives ₹30,000. He wants a laptop, "
+        "financial security and a better future. "
+        "But he has never made a financial plan.",
+        "🧑‍💼",
+    )
+
+    animated_flow()
+
+    st.subheader("Why a financial plan matters")
+
+    st.write(
+        "A financial plan helps you decide how money should "
+        "be used instead of making every decision at the moment "
+        "you spend."
+    )
+
+    st.markdown("""
+    - **Protect:** Prepare for unexpected expenses.
+    - **Control:** Understand spending.
+    - **Plan:** Work toward purchases.
+    - **Grow:** Build long-term financial goals.
     """)
 
-    st.subheader("4. Build Alex's financial plan")
+    with st.expander("What is a financial goal?"):
+        st.write(
+            "A financial goal is something you want to achieve "
+            "with money. Goals can be short-term, medium-term "
+            "or long-term."
+        )
 
-    st.write("Help Alex decide how much money to allocate.")
+        st.markdown("""
+        **Short-term:** A phone, emergency savings or a trip.
+
+        **Medium-term:** Education, a vehicle or a larger purchase.
+
+        **Long-term:** Retirement, wealth-building or financial independence.
+        """)
+
+    st.subheader("🎮 Create Alex's plan")
 
     income = st.number_input(
-        "Alex's monthly income (₹)",
+        "Monthly take-home income",
         min_value=0,
         value=30000,
         step=1000,
-        key="l9_income"
+        key="c3_new_l9_income",
     )
 
-    essentials = st.number_input(
-        "Essential expenses (₹)",
-        min_value=0,
-        value=12000,
+    essentials = st.slider(
+        "Essential expenses",
+        0,
+        max(1, income),
+        min(15000, income),
         step=500,
-        key="l9_essential"
+        key="c3_new_l9_essential",
     )
 
-    savings = st.number_input(
-        "Savings and goal money (₹)",
-        min_value=0,
-        value=5000,
+    lifestyle = st.slider(
+        "Lifestyle spending",
+        0,
+        max(1, income),
+        min(4000, income),
         step=500,
-        key="l9_savings"
+        key="c3_new_l9_lifestyle",
     )
 
-    other = st.number_input(
-        "Other spending (₹)",
-        min_value=0,
-        value=4000,
+    emergency = st.slider(
+        "Emergency fund contribution",
+        0,
+        max(1, income),
+        min(3000, income),
         step=500,
-        key="l9_other"
+        key="c3_new_l9_emergency",
     )
 
-    remaining = income - essentials - savings - other
+    goals = st.slider(
+        "Goal savings",
+        0,
+        max(1, income),
+        min(3000, income),
+        step=500,
+        key="c3_new_l9_goal",
+    )
 
-    st.metric("Money remaining", f"₹{remaining:,.2f}")
+    allocated = essentials + lifestyle + emergency + goals
+    remainder = income - allocated
 
-    if remaining < 0:
-        st.error("Alex has allocated more money than he earns.")
-    elif remaining == 0:
-        st.success("Every rupee is allocated. Alex has a balanced plan.")
+    fig = go.Figure(
+        go.Pie(
+            labels=[
+                "Essentials",
+                "Lifestyle",
+                "Emergency",
+                "Goals",
+                "Unallocated",
+            ],
+            values=[
+                essentials,
+                lifestyle,
+                emergency,
+                goals,
+                max(0, remainder),
+            ],
+            hole=0.55,
+        )
+    )
+
+    fig.update_layout(
+        height=380,
+        title="Your monthly financial allocation",
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.metric("Income", money(income))
+    st.metric("Allocated", money(allocated))
+    st.metric("Remaining", money(remainder))
+
+    if remainder < 0:
+        st.error(
+            "You allocated more than your income. "
+            "Reduce one or more categories."
+        )
+    elif remainder > 0:
+        st.info(
+            "You still have money without a specific purpose. "
+            "Consider assigning it to a goal or future expense."
+        )
     else:
-        st.info("Alex has money left. He could review his priorities and decide how to allocate it.")
+        st.success("Your entire income has been allocated.")
 
-    st.subheader("5. What makes a financial plan useful?")
+    st.subheader("🎯 Goal planning simulator")
 
-    st.markdown("""
-    - **Realistic:** It matches your actual income.
-    - **Specific:** It includes amounts and deadlines.
-    - **Flexible:** It can change when circumstances change.
-    - **Prioritized:** Essential expenses and financial safety matter.
-    - **Reviewed:** It should be updated when life changes.
-    """)
-
-    quiz(
-        "l9",
-        [
-            {
-                "q": "Which is the most useful financial goal?",
-                "options": [
-                    "I want to become rich.",
-                    "I want to save ₹24,000 within 12 months.",
-                    "I want to spend less someday.",
-                ],
-                "correct": 1,
-                "explanation": "The ₹24,000 goal has a specific amount and deadline. "
-                              "It is measurable and can be turned into a monthly saving plan."
-            },
-            {
-                "q": "Why can two people need different financial plans?",
-                "options": [
-                    "Everyone should follow the same plan.",
-                    "Income, goals, responsibilities and circumstances differ.",
-                    "Plans are only needed by wealthy people.",
-                ],
-                "correct": 1,
-                "explanation": "Financial plans depend on personal circumstances, goals, "
-                              "income, responsibilities and risk tolerance."
-            },
-            {
-                "q": "What should Alex do if his financial circumstances change?",
-                "options": [
-                    "Never change the plan.",
-                    "Review and adjust his plan.",
-                    "Ignore the change.",
-                ],
-                "correct": 1,
-                "explanation": "A financial plan should be flexible. New income, expenses, "
-                              "responsibilities or goals may require adjustments."
-            }
-        ]
-    )
-
-    st.markdown("""
-    <div class="money-success">
-    <b>Lesson 9 connection:</b> Alex now has a plan, but he still needs to
-    understand how money enters and leaves his account. That's our next lesson.
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# =========================================================
-# LESSON 10 — INCOME, EXPENSES & CASH FLOW
-# =========================================================
-
-def lesson10():
-    st.header("💸 Lesson 10: Income, Expenses & Cash Flow")
-
-    st.markdown("""
-    <div class="money-story">
-    <h3>Alex's money disappears...</h3>
-    Alex receives ₹30,000 every month.
-
-    He believes he earns enough. But at the end of the month,
-    he is surprised by how little money remains.
-
-    He decides to investigate where his money goes.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("1. Understanding income")
-
-    st.write("""
-    Income is money received.
-
-    Common sources include:
-    - Salary or wages.
-    - Business income.
-    - Freelancing.
-    - Interest.
-    - Dividends.
-    - Rental income.
-
-    Income is not the same as wealth. A person may earn a large income
-    but still have little wealth if they spend everything or accumulate debt.
-    """)
-
-    st.subheader("2. Understanding expenses")
-
-    st.write("""
-    Expenses are money spent.
-
-    **Fixed expenses:** Usually remain relatively stable for a period,
-    such as rent or a regular subscription.
-
-    **Variable expenses:** Change over time, such as groceries,
-    electricity, transport or entertainment.
-
-    Some expenses are essential, while others are discretionary.
-    These categories can depend on a person's circumstances.
-    """)
-
-    st.subheader("3. Cash flow")
-
-    st.write("""
-    Cash flow describes the movement of money in and out over a period.
-
-    **Cash flow = Money received − Money spent**
-
-    Positive cash flow means more money came in than went out
-    during that period.
-
-    Negative cash flow means more money went out than came in.
-    """)
-
-    st.subheader("4. Alex's monthly budget simulator")
-
-    income = st.number_input(
-        "Monthly income (₹)",
-        min_value=0,
-        value=30000,
-        step=1000,
-        key="l10_income"
-    )
-
-    rent = st.number_input(
-        "Housing (₹)",
-        min_value=0,
-        value=8000,
-        step=500,
-        key="l10_rent"
-    )
-
-    food = st.number_input(
-        "Food (₹)",
-        min_value=0,
-        value=4000,
-        step=500,
-        key="l10_food"
-    )
-
-    transport = st.number_input(
-        "Transport (₹)",
-        min_value=0,
-        value=2000,
-        step=500,
-        key="l10_transport"
-    )
-
-    bills = st.number_input(
-        "Bills and utilities (₹)",
-        min_value=0,
-        value=2000,
-        step=500,
-        key="l10_bills"
-    )
-
-    shopping = st.number_input(
-        "Shopping and entertainment (₹)",
-        min_value=0,
-        value=4000,
-        step=500,
-        key="l10_shopping"
-    )
-
-    other = st.number_input(
-        "Other expenses (₹)",
-        min_value=0,
-        value=1000,
-        step=500,
-        key="l10_other"
-    )
-
-    total_expenses = rent + food + transport + bills + shopping + other
-    cash_flow = income - total_expenses
-
-    st.divider()
-
-    st.metric("Total expenses", f"₹{total_expenses:,.2f}")
-    st.metric("Monthly cash flow", f"₹{cash_flow:,.2f}")
-
-    if cash_flow > 0:
-        st.success(f"Alex has ₹{cash_flow:,.2f} remaining this month.")
-    elif cash_flow == 0:
-        st.info("Alex has used all of his income.")
-    else:
-        st.error(f"Alex has a shortfall of ₹{abs(cash_flow):,.2f}.")
-
-    st.subheader("5. What if Alex earns more?")
-
-    new_income = st.number_input(
-        "Try a different income (₹)",
-        min_value=0,
+    goal_amount = st.number_input(
+        "What is Alex's goal?",
+        min_value=1000,
         value=40000,
         step=1000,
-        key="l10_new_income"
+        key="c3_new_l9_goal_amount",
     )
 
-    new_flow = new_income - total_expenses
+    monthly_saving = st.slider(
+        "Monthly savings toward this goal",
+        500,
+        30000,
+        5000,
+        step=500,
+        key="c3_new_l9_monthly",
+    )
 
-    st.metric("Cash flow at new income", f"₹{new_flow:,.2f}")
+    goal_months = goal_amount / monthly_saving
+
+    st.metric(
+        "Estimated time",
+        f"{goal_months:.1f} months",
+    )
+
+    st.write(
+        f"At {money(monthly_saving)} per month, "
+        f"Alex needs approximately {goal_months:.1f} months "
+        f"to save {money(goal_amount)}."
+    )
+
+    months = list(range(0, 25))
+    projected = [
+        min(goal_amount, monthly_saving * m)
+        for m in months
+    ]
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=months,
+            y=projected,
+            mode="lines+markers",
+            name="Savings",
+        )
+    )
+
+    fig.add_hline(
+        y=goal_amount,
+        line_dash="dash",
+        annotation_text="Goal",
+    )
+
+    fig.update_layout(
+        title="Your savings journey",
+        xaxis_title="Months",
+        yaxis_title="Savings (₹)",
+        height=350,
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader("Real-world explanation")
 
     st.write("""
-    Higher income can improve cash flow, but only if spending doesn't
-    increase by the same amount or more.
-    """)
+    This projection assumes the money is saved consistently
+    and that there is no interest, investment return or
+    withdrawal.
 
-    st.subheader("6. Why tracking matters")
+    If income changes, the plan should be adjusted.
 
-    st.write("""
-    Tracking money can help identify:
-    - Repeated unnecessary spending.
-    - Expenses that are increasing.
-    - Opportunities to save.
-    - Whether goals are realistic.
-    - Problems before they become serious.
-
-    A budget isn't a punishment. It is a tool for making choices.
+    A plan is a guide, not a guarantee.
     """)
 
     quiz(
-        "l10",
-        [
-            {
-                "q": "Alex earns ₹25,000 and spends ₹22,000. What is his cash flow?",
-                "options": ["₹3,000 positive", "₹3,000 negative", "₹47,000"],
-                "correct": 0,
-                "explanation": "₹25,000 − ₹22,000 = ₹3,000 positive cash flow."
-            },
-            {
-                "q": "What does a higher income guarantee?",
-                "options": [
-                    "Higher wealth.",
-                    "No financial problems.",
-                    "Nothing by itself; spending and other factors matter."
-                ],
-                "correct": 2,
-                "explanation": "Higher income alone doesn't guarantee wealth. "
-                              "Expenses, saving, debt, investments and other factors matter."
-            },
-            {
-                "q": "What is the purpose of tracking expenses?",
-                "options": [
-                    "To understand where money goes.",
-                    "To stop all spending.",
-                    "To make income unnecessary."
-                ],
-                "correct": 0,
-                "explanation": "Tracking expenses helps understand spending patterns "
-                              "and make informed financial decisions."
-            }
-        ]
+        "Alex wants a ₹40,000 laptop. He saves ₹5,000 every month. "
+        "How long will it take?",
+        ["4 months", "8 months", "10 months", "12 months"],
+        "8 months",
+        "₹40,000 divided by ₹5,000 is 8 months. "
+        "The calculation assumes no interest and no withdrawals.",
+        "c3_new_quiz9",
     )
 
+    st.markdown("### 🔗 What comes next?")
+
+    st.write(
+        "Alex has created a plan. Now he needs to understand "
+        "the money actually entering and leaving his account. "
+        "Next: Cash flow."
+    )
+
+    completion_button(9)
+
+
+def show_lesson10():
+
+    hero(
+        "Master Your Cash Flow",
+        "Know where your money comes from and where it goes.",
+        "💸",
+    )
+
+    scene(
+        "Where did the money go?",
+        "Alex earns ₹30,000, but at the end of the month "
+        "he doesn't know why his balance is so low. "
+        "He starts recording every expense.",
+        "🔎",
+    )
+
+    animated_flow()
+
+    st.subheader("Three important concepts")
+
+    with st.expander("💼 Income"):
+        st.write(
+            "Income is money received, such as salary, freelance "
+            "earnings, business income or rent."
+        )
+
+    with st.expander("🧾 Expenses"):
+        st.write(
+            "Expenses are money spent. They may be fixed, "
+            "variable or irregular."
+        )
+
+    with st.expander("💰 Cash flow"):
+        st.write(
+            "Cash flow is the difference between money entering "
+            "and leaving during a period."
+        )
+
+    st.subheader("🎮 Build your own cash flow")
+
+    income = st.number_input(
+        "Monthly income",
+        min_value=0,
+        value=30000,
+        step=1000,
+        key="c3_new_l10_income",
+    )
+
+    categories = {
+        "Housing": 8000,
+        "Food": 5000,
+        "Transport": 2000,
+        "Bills": 2000,
+        "Shopping": 4000,
+        "Other": 1000,
+    }
+
+    expenses = {}
+
+    for name, default in categories.items():
+        expenses[name] = st.number_input(
+            name,
+            min_value=0,
+            value=default,
+            step=500,
+            key=f"c3_new_l10_{name}",
+        )
+
+    total = sum(expenses.values())
+    cashflow = income - total
+
+    st.metric("Total expenses", money(total))
+    st.metric("Monthly cash flow", money(cashflow))
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(
+            x=list(expenses.keys()),
+            y=list(expenses.values()),
+            text=[money(x) for x in expenses.values()],
+            textposition="auto",
+        )
+    )
+
+    fig.update_layout(
+        title="Where your money goes",
+        height=350,
+        yaxis_title="₹",
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    if cashflow > 0:
+        st.success(
+            f"Positive cash flow: {money(cashflow)}. "
+            "This is an opportunity to save, invest or plan."
+        )
+    elif cashflow == 0:
+        st.warning(
+            "Your income and expenses are equal. "
+            "You have no surplus this month."
+        )
+    else:
+        st.error(
+            f"Negative cash flow: {money(cashflow)}. "
+            "You are spending more than you earn."
+        )
+
+    st.subheader("📉 What happens if spending increases?")
+
+    extra = st.slider(
+        "Extra monthly spending",
+        0,
+        10000,
+        0,
+        step=500,
+        key="c3_new_l10_extra",
+    )
+
+    adjusted = cashflow - extra
+
+    st.metric(
+        "Cash flow after extra spending",
+        money(adjusted),
+    )
+
+    if adjusted < 0:
+        st.error("Your extra spending creates a deficit.")
+    else:
+        st.info(
+            "This spending fits within the current cash flow, "
+            "but consider whether it supports your goals."
+        )
+
+    st.subheader("🧠 Decision challenge")
+
+    quiz(
+        "Alex earns ₹30,000 and spends ₹27,000. "
+        "What is his cash flow?",
+        ["₹1,000", "₹2,000", "₹3,000", "₹5,000"],
+        "₹3,000",
+        "₹30,000 minus ₹27,000 equals ₹3,000. "
+        "Positive cash flow can help fund goals.",
+        "c3_new_quiz10",
+    )
+
+    st.markdown("### 🔗 What comes next?")
+
+    st.write(
+        "Alex now knows his cash flow. But an unexpected "
+        "expense could still disrupt his plan. "
+        "Next: The emergency fund."
+    )
+
+    completion_button(10)
+
+
+def show_lesson11():
+
+    hero(
+        "Build Your Financial Safety Net",
+        "Prepare for unexpected events before they happen.",
+        "🛡️",
+    )
+
+    scene(
+        "The unexpected repair",
+        "Alex's laptop breaks. Repairing it costs ₹8,000. "
+        "He has only ₹5,000 in savings. "
+        "He discovers why emergency savings matter.",
+        "💻",
+    )
+
+    st.subheader("What is an emergency fund?")
+
+    st.write("""
+    An emergency fund is money kept accessible for
+    unexpected expenses or income interruptions.
+
+    It can help you avoid relying on expensive borrowing
+    or selling investments at an inconvenient time.
+    """)
+
     st.markdown("""
-    <div class="money-success">
-    <b>Lesson 10 connection:</b> Alex understands his cash flow.
-    But a surprise expense could still destroy his monthly plan.
-    He needs protection. Next: emergency funds.
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# =========================================================
-# LESSON 11 — THE EMERGENCY FUND
-# =========================================================
-
-def lesson11():
-    st.header("🛡️ Lesson 11: The Emergency Fund")
-
-    st.markdown("""
-    <div class="money-story">
-    <h3>An unexpected problem</h3>
-    Alex has been managing his monthly money.
-
-    One day, his phone breaks. Later, he faces an unexpected medical
-    expense and a sudden travel need.
-
-    These expenses were not part of his normal plan.
-
-    <b>What should he do?</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("1. What is an emergency fund?")
-
-    st.write("""
-    An emergency fund is money set aside for unexpected, necessary
-    expenses or financial disruptions.
-
-    Examples may include:
-    - Unexpected medical costs.
-    - Job loss or interruption of income.
-    - Essential repairs.
-    - Emergency travel.
-    - Other urgent expenses.
-
-    It is not generally intended for planned shopping, vacations
-    or speculative investments.
+    **Common emergencies:**
+    - Medical expenses
+    - Essential repairs
+    - Loss of income
+    - Emergency travel
+    - Unexpected necessary bills
     """)
 
-    st.subheader("2. Why is it important?")
+    info_card(
+        "Emergency savings are not an investment strategy",
+        "Their main purpose is safety and access. "
+        "You generally shouldn't depend on volatile investments "
+        "to pay for an emergency.",
+        "🧯",
+    )
 
-    st.write("""
-    Without emergency savings, a sudden expense may force someone to:
-    - Borrow money.
-    - Use expensive credit.
-    - Sell investments at an inconvenient time.
-    - Delay necessary payments.
+    st.subheader("🎮 Calculate your emergency fund")
 
-    Emergency savings can help reduce the need for these choices.
-    """)
-
-    st.subheader("3. How much could someone save?")
-
-    st.write("""
-    A common planning guideline is to build savings equal to several
-    months of essential expenses. The appropriate amount depends on
-    employment stability, responsibilities, health, insurance, access
-    to support and other circumstances.
-
-    The goal is not a universal fixed number.
-    """)
-
-    monthly_essential = st.number_input(
-        "Essential monthly expenses (₹)",
+    monthly_essentials = st.number_input(
+        "Essential monthly expenses",
         min_value=0,
         value=15000,
         step=1000,
-        key="l11_essential"
+        key="c3_new_l11_essentials",
     )
 
-    months = st.slider(
-        "Months of expenses to plan for",
-        min_value=1,
-        max_value=12,
-        value=6,
-        key="l11_months"
+    target_months = st.slider(
+        "Months of protection",
+        1,
+        12,
+        6,
+        key="c3_new_l11_target_months",
     )
 
-    target = monthly_essential * months
+    target = monthly_essentials * target_months
 
-    st.metric("Emergency fund target", f"₹{target:,.2f}")
+    st.metric(
+        "Emergency fund target",
+        money(target),
+    )
 
-    st.write("""
-    This is a planning estimate. You may build toward it gradually.
-    """)
-
-    st.subheader("4. Build the fund gradually")
+    st.write(
+        "A commonly used planning target is 3–6 months "
+        "of essential expenses. Your circumstances may "
+        "justify a different amount."
+    )
 
     current = st.number_input(
-        "Current emergency savings (₹)",
+        "Current emergency savings",
         min_value=0,
         value=5000,
         step=1000,
-        key="l11_current"
+        key="c3_new_l11_current",
     )
 
-    monthly_save = st.number_input(
-        "Monthly contribution (₹)",
-        min_value=0,
-        value=3000,
+    contribution = st.slider(
+        "Monthly savings contribution",
+        0,
+        50000,
+        3000,
         step=500,
-        key="l11_contribution"
+        key="c3_new_l11_contribution",
     )
 
-    remaining = max(target - current, 0)
+    missing = max(0, target - current)
 
-    st.metric("Amount still needed", f"₹{remaining:,.2f}")
-
-    if remaining == 0:
-        st.success("Alex has reached this target!")
-    elif monthly_save > 0:
-        needed_months = (remaining + monthly_save - 1) // monthly_save
-        st.info(f"At this contribution, Alex would need approximately {needed_months} months.")
-    else:
-        st.warning("Enter a monthly contribution to estimate the time required.")
-
-    st.subheader("5. Where should emergency money be kept?")
-
-    st.write("""
-    Emergency savings generally prioritize accessibility and preservation
-    of money rather than high returns.
-
-    Depending on the country, financial institution and circumstances,
-    options may include:
-    - Savings accounts.
-    - Other suitable liquid, low-risk arrangements.
-
-    Consider access, safety, applicable protections, fees and withdrawal
-    restrictions. An investment that can lose substantial value may not
-    be appropriate for money needed immediately.
-    """)
-
-    st.subheader("6. Emergency fund decision simulator")
-
-    st.write("Alex has ₹20,000 in emergency savings.")
-
-    event = st.selectbox(
-        "Choose an unexpected event",
-        [
-            "Essential repair costing ₹5,000",
-            "Unexpected bill costing ₹12,000",
-            "Temporary loss of income",
-            "Want to buy a new gaming console"
-        ],
-        key="l11_event"
+    st.metric(
+        "Amount still needed",
+        money(missing),
     )
 
-    if event == "Essential repair costing ₹5,000":
-        st.success("An emergency fund may be appropriate for an essential unexpected repair.")
-    elif event == "Unexpected bill costing ₹12,000":
-        st.success("If the bill is necessary and unexpected, emergency savings may help.")
-    elif event == "Temporary loss of income":
-        st.info("Emergency savings can help cover essential expenses while income is interrupted.")
+    if contribution > 0:
+        months_needed = missing / contribution
+        st.metric(
+            "Estimated time to target",
+            f"{months_needed:.1f} months",
+        )
+    elif missing > 0:
+        st.warning(
+            "Set a monthly contribution to estimate "
+            "how long it will take."
+        )
     else:
-        st.warning("A gaming console is normally a planned purchase, not an emergency. "
-                   "Consider saving separately for it.")
+        st.success("You have reached this target.")
 
-    quiz(
-        "l11",
-        [
-            {
-                "q": "What is the main purpose of an emergency fund?",
-                "options": [
-                    "To buy luxury items.",
-                    "To help handle unexpected necessary expenses.",
-                    "To speculate on stocks."
-                ],
-                "correct": 1,
-                "explanation": "Emergency savings are intended to help manage unexpected "
-                              "necessary expenses or disruptions."
-            },
-            {
-                "q": "Why may emergency savings be kept in a liquid, low-risk place?",
-                "options": [
-                    "Because access and preservation matter.",
-                    "Because it guarantees the highest return.",
-                    "Because it cannot ever lose purchasing power."
-                ],
-                "correct": 0,
-                "explanation": "Emergency money may be needed quickly. Accessibility and "
-                              "preservation generally matter more than maximizing returns."
-            },
-            {
-                "q": "Is six months of expenses a universal rule?",
-                "options": [
-                    "Yes, for every person.",
-                    "No, it is a common guideline that depends on circumstances.",
-                    "Emergency funds are unnecessary."
-                ],
-                "correct": 1,
-                "explanation": "Several months of essential expenses is a common guideline, "
-                              "but an appropriate target varies by personal circumstances."
-            }
+    progress = min(
+        current / target if target > 0 else 0,
+        1.0,
+    )
+
+    st.progress(progress)
+
+    st.caption(
+        f"Target progress: {progress*100:.1f}%"
+    )
+
+    st.subheader("📈 Build your savings timeline")
+
+    if contribution > 0:
+
+        timeline = list(range(0, 37))
+
+        values = [
+            current + contribution * month
+            for month in timeline
         ]
-    )
 
-    st.markdown("""
-    <div class="money-success">
-    <b>Lesson 11 connection:</b> Alex now has a financial safety net.
-    He must also learn to make thoughtful spending decisions so he doesn't
-    unnecessarily weaken that safety net.
-    </div>
-    """, unsafe_allow_html=True)
+        fig = go.Figure()
 
-
-# =========================================================
-# LESSON 12 — NEEDS, WANTS & SMART SPENDING
-# =========================================================
-
-def lesson12():
-    st.header("🛒 Lesson 12: Needs, Wants & Smart Spending")
-
-    st.markdown("""
-    <div class="money-story">
-    <h3>Alex enters a shopping store...</h3>
-    Alex has money available.
-
-    He sees shoes, a phone, food, headphones and several attractive offers.
-
-    He wants everything. But he has limited money and financial goals.
-
-    <b>He must choose.</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.subheader("1. Needs vs wants")
-
-    st.write("""
-    **Needs:** Expenses required for basic living, responsibilities,
-    safety or functioning. Examples can include food, basic housing,
-    essential medicine and necessary transport.
-
-    **Wants:** Purchases that improve enjoyment, comfort or convenience
-    but are not currently essential.
-
-    The distinction depends on circumstances. A phone may be a want for
-    one person and essential for another person's work.
-    """)
-
-    st.subheader("2. The opportunity cost")
-
-    st.write("""
-    Opportunity cost is the value of the next-best alternative you give
-    up when making a choice.
-
-    If Alex spends ₹5,000 on headphones, he may no longer have that
-    ₹5,000 available for a laptop, savings or another goal.
-
-    Money spent has trade-offs.
-    """)
-
-    st.subheader("3. Impulse buying")
-
-    st.write("""
-    Impulse buying happens when someone purchases something without
-    enough deliberate consideration.
-
-    Common triggers:
-    - Limited-time offers.
-    - Social pressure.
-    - Emotional stress.
-    - Advertising.
-    - FOMO.
-    - Easy access to credit.
-
-    A discount does not automatically make a purchase financially wise.
-    """)
-
-    st.subheader("4. The 24-hour decision technique")
-
-    st.write("""
-    For non-essential purchases, waiting before buying can help.
-
-    Ask:
-    - Do I actually need this?
-    - Can I afford it without borrowing?
-    - Does it fit my plan?
-    - Would I buy it if there were no discount?
-    - What am I giving up by purchasing it?
-    """)
-
-    st.subheader("5. Alex's shopping decision game")
-
-    budget = st.number_input(
-        "Alex's available spending budget (₹)",
-        min_value=0,
-        value=10000,
-        step=1000,
-        key="l12_budget"
-    )
-
-    items = {
-        "Groceries": 2500,
-        "Essential shoes": 2000,
-        "Headphones": 3000,
-        "Gaming accessory": 2500,
-        "Movie night": 1000,
-        "Laptop savings contribution": 4000,
-    }
-
-    st.write("Choose items Alex wants to allocate money toward.")
-
-    selected_items = []
-
-    for item, cost in items.items():
-        if st.checkbox(f"{item} — ₹{cost:,}", key=f"l12_{item}"):
-            selected_items.append((item, cost))
-
-    total = sum(cost for _, cost in selected_items)
-
-    st.metric("Total selected", f"₹{total:,.2f}")
-    st.metric("Remaining budget", f"₹{budget - total:,.2f}")
-
-    if total > budget:
-        st.error("Alex has exceeded his budget.")
-    else:
-        st.success("Alex is within his budget.")
-
-    if selected_items:
-        st.write("**Alex's choices:**")
-        for item, cost in selected_items:
-            st.write(f"- {item}: ₹{cost:,}")
-
-    st.subheader("6. Smart spending doesn't mean spending nothing")
-
-    st.write("""
-    Smart spending is about making purchases that fit your priorities,
-    resources and goals.
-
-    A sustainable plan may include enjoyment. The objective isn't to
-    eliminate every want; it's to make deliberate choices and avoid
-    sacrificing important goals unnecessarily.
-    """)
-
-    quiz(
-        "l12",
-        [
-            {
-                "q": "What is opportunity cost?",
-                "options": [
-                    "The value of the next-best alternative you give up.",
-                    "The price of every item in a shop.",
-                    "The money a bank lends."
-                ],
-                "correct": 0,
-                "explanation": "Opportunity cost is the value of the next-best alternative "
-                              "you give up when choosing one option."
-            },
-            {
-                "q": "Does a 50% discount automatically mean a smart purchase?",
-                "options": [
-                    "Yes, every discount is worth buying.",
-                    "No, it still depends on need, affordability and priorities.",
-                    "Yes, even if you borrow to buy it."
-                ],
-                "correct": 1,
-                "explanation": "A discount reduces the price but doesn't make an unnecessary "
-                              "purchase valuable or affordable by itself."
-            },
-            {
-                "q": "Which approach can help reduce impulse buying?",
-                "options": [
-                    "Buy immediately.",
-                    "Use credit for every purchase.",
-                    "Pause, review priorities and wait before non-essential purchases."
-                ],
-                "correct": 2,
-                "explanation": "Pausing helps you consider affordability, goals and alternatives "
-                              "before making a non-essential purchase."
-            },
-            {
-                "q": "What does smart spending mean?",
-                "options": [
-                    "Never spending money on enjoyment.",
-                    "Making deliberate purchases that fit your priorities.",
-                    "Buying everything that is discounted."
-                ],
-                "correct": 1,
-                "explanation": "Smart spending balances needs, wants, goals and available resources. "
-                              "It doesn't require eliminating all enjoyment."
-            }
-        ]
-    )
-
-    st.markdown("""
-    <div class="money-success">
-    <h3>🎉 Chapter 3 completed!</h3>
-
-    Alex has now learned to:
-
-    - Create a financial plan.
-    - Understand income and expenses.
-    - Calculate cash flow.
-    - Build an emergency fund.
-    - Distinguish needs and wants.
-    - Think about opportunity cost.
-    - Make smarter spending decisions.
-
-    <b>Next chapter: Chapter 4 — Understanding Debt.</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# =========================================================
-# REUSABLE QUIZ WITH EXPLANATIONS
-# =========================================================
-
-def quiz(quiz_id, questions):
-    st.divider()
-    st.header("🧠 Knowledge Check")
-
-    answers = []
-
-    for i, q in enumerate(questions):
-        st.markdown(f"**Question {i + 1}: {q['q']}**")
-
-        choice = st.radio(
-            "Select your answer:",
-            q["options"],
-            key=f"{quiz_id}_q{i}",
-            index=None
+        fig.add_trace(
+            go.Scatter(
+                x=timeline,
+                y=values,
+                mode="lines+markers",
+                name="Emergency savings",
+            )
         )
 
-        answers.append(choice)
+        fig.add_hline(
+            y=target,
+            line_dash="dash",
+            annotation_text="Target",
+        )
 
-    if st.button("Check my answers", key=f"{quiz_id}_check"):
-        score = 0
+        fig.update_layout(
+            title="Emergency fund timeline",
+            xaxis_title="Months",
+            yaxis_title="₹",
+            height=350,
+        )
 
-        for i, q in enumerate(questions):
-            chosen = answers[i]
+        st.plotly_chart(fig, use_container_width=True)
 
-            if chosen is None:
-                st.warning(f"Question {i + 1}: Please select an answer.")
-                continue
+    st.subheader("⚠️ Emergency scenario")
 
-            selected_index = q["options"].index(chosen)
+    repair = st.number_input(
+        "Emergency expense",
+        min_value=0,
+        value=8000,
+        step=500,
+        key="c3_new_l11_repair",
+    )
 
-            if selected_index == q["correct"]:
-                score += 1
-                st.success(f"Question {i + 1}: Correct!")
-            else:
-                st.error(f"Question {i + 1}: Incorrect.")
+    available = st.number_input(
+        "Money available for the emergency",
+        min_value=0,
+        value=5000,
+        step=500,
+        key="c3_new_l11_available",
+    )
 
-            st.write(f"**Correct answer:** {q['options'][q['correct']]}")
-            st.info(q["explanation"])
+    shortfall = max(0, repair - available)
 
-        st.markdown("---")
-        st.subheader(f"Your score: {score}/{len(questions)}")
+    st.metric(
+        "Potential shortfall",
+        money(shortfall),
+    )
 
-        if score == len(questions):
-            st.success("Excellent! You understood all the concepts.")
-        elif score >= len(questions) / 2:
-            st.info("Good progress! Review the explanations for the questions you missed.")
-        else:
-            st.warning("Review this lesson and try again to strengthen your understanding.")
+    st.write(
+        "The shortfall is the amount that isn't covered "
+        "by available funds. It is not automatically "
+        "the amount you should borrow."
+    )
+
+    quiz(
+        "A repair costs ₹8,000. Alex has ₹5,000 available. "
+        "How much is missing?",
+        ["₹1,000", "₹2,000", "₹3,000", "₹5,000"],
+        "₹3,000",
+        "₹8,000 minus ₹5,000 equals ₹3,000. "
+        "Alex must consider his options for the shortfall.",
+        "c3_new_quiz11",
+    )
+
+    st.markdown("### 🔗 What comes next?")
+
+    st.write(
+        "Alex understands saving. Now he must make everyday "
+        "spending decisions without sacrificing every enjoyable "
+        "thing in life. Next: Needs, wants and spending."
+    )
+
+    completion_button(11)
+
+
+def show_lesson12():
+
+    hero(
+        "Spend With Intelligence",
+        "Make deliberate decisions without eliminating enjoyment.",
+        "🛍️",
+    )
+
+    scene(
+        "The headphone decision",
+        "Alex wants ₹6,000 headphones. He also wants to "
+        "save for his laptop and emergency fund. "
+        "He must decide whether the purchase fits his plan.",
+        "🎧",
+    )
+
+    st.subheader("Needs and wants")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("""
+        ### 🏠 Needs
+
+        Examples:
+        - Housing
+        - Essential food
+        - Basic healthcare
+        - Essential transport
+        - Necessary bills
+        """)
+
+    with col2:
+        st.markdown("""
+        ### 🎮 Wants
+
+        Examples:
+        - Luxury upgrades
+        - Extra entertainment
+        - Premium accessories
+        - Non-essential subscriptions
+        - Impulse purchases
+        """)
+
+    st.info(
+        "A purchase can be a need for one person and a want "
+        "for another. Context matters."
+    )
+
+    st.subheader("🎮 Spending simulator")
+
+    income = st.number_input(
+        "Monthly income",
+        min_value=0,
+        value=30000,
+        step=1000,
+        key="c3_new_l12_income",
+    )
+
+    needs = st.slider(
+        "Needs",
+        0,
+        max(1, income),
+        min(15000, income),
+        step=500,
+        key="c3_new_l12_needs",
+    )
+
+    savings = st.slider(
+        "Savings",
+        0,
+        max(1, income),
+        min(5000, income),
+        step=500,
+        key="c3_new_l12_savings",
+    )
+
+    wants = st.slider(
+        "Wants",
+        0,
+        max(1, income),
+        min(5000, income),
+        step=500,
+        key="c3_new_l12_wants",
+    )
+
+    allocated = needs + savings + wants
+
+    remaining = income - allocated
+
+    st.metric(
+        "Money remaining",
+        money(remaining),
+    )
+
+    fig = go.Figure(
+        go.Pie(
+            labels=["Needs", "Savings", "Wants", "Remaining"],
+            values=[
+                needs,
+                savings,
+                wants,
+                max(0, remaining),
+            ],
+            hole=0.5,
+        )
+    )
+
+    fig.update_layout(
+        title="Spending plan",
+        height=350,
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    if remaining < 0:
+        st.error("Your plan exceeds your income.")
+    elif remaining == 0:
+        st.success("Your plan allocates all available income.")
+    else:
+        st.info("You have unallocated money.")
+
+    st.subheader("🧠 Purchase decision")
+
+    price = st.number_input(
+        "Purchase price",
+        min_value=0,
+        value=6000,
+        step=500,
+        key="c3_new_l12_price",
+    )
+
+    available_money = st.number_input(
+        "Money available after essentials and savings",
+        min_value=0,
+        value=5000,
+        step=500,
+        key="c3_new_l12_available",
+    )
+
+    gap = max(0, price - available_money)
+
+    st.metric(
+        "Amount you would need to find",
+        money(gap),
+    )
+
+    if gap > 0:
+        st.warning(
+            "This purchase exceeds the available budget. "
+            "Consider waiting, saving more or choosing "
+            "a less expensive alternative."
+        )
+    else:
+        st.success(
+            "This purchase fits within the money you "
+            "specified as available. Check that the "
+            "budget is realistic."
+        )
+
+    st.subheader("🧠 Decision challenge")
+
+    quiz(
+        "Alex wants headphones costing ₹6,000. "
+        "He has ₹5,000 available after his planned expenses. "
+        "What is a reasonable approach?",
+        [
+            "Buy immediately using borrowed money",
+            "Ignore his financial goals",
+            "Wait, save more or reconsider the purchase",
+            "Never buy anything enjoyable",
+        ],
+        "Wait, save more or reconsider the purchase",
+        "The purchase exceeds his available budget by ₹1,000. "
+        "Waiting or adjusting the purchase can help protect "
+        "his financial plan. Enjoyment is not the problem; "
+        "unplanned spending is.",
+        "c3_new_quiz12",
+    )
+
+    st.subheader("⏳ The 24-hour rule")
+
+    st.write("""
+    For non-essential purchases, consider waiting 24 hours.
+
+    For expensive purchases, consider waiting longer.
+
+    During that time:
+    - Compare prices.
+    - Check your budget.
+    - Think about the goal it might delay.
+    - Consider alternatives.
+    - Decide whether you still want it.
+
+    This is a practical decision-making technique,
+    not a guarantee.
+    """)
+
+    st.subheader("🏆 Final challenge — Alex's financial blueprint")
+
+    final_income = 30000
+
+    final_needs = st.slider(
+        "Essential expenses",
+        0,
+        final_income,
+        15000,
+        step=500,
+        key="c3_new_final_needs",
+    )
+
+    final_emergency = st.slider(
+        "Emergency fund",
+        0,
+        final_income,
+        3000,
+        step=500,
+        key="c3_new_final_emergency",
+    )
+
+    final_goal = st.slider(
+        "Laptop goal",
+        0,
+        final_income,
+        3000,
+        step=500,
+        key="c3_new_final_goal",
+    )
+
+    final_wants = st.slider(
+        "Entertainment & wants",
+        0,
+        final_income,
+        3000,
+        step=500,
+        key="c3_new_final_wants",
+    )
+
+    final_other = st.slider(
+        "Other expenses",
+        0,
+        final_income,
+        2000,
+        step=500,
+        key="c3_new_final_other",
+    )
+
+    final_total = (
+        final_needs +
+        final_emergency +
+        final_goal +
+        final_wants +
+        final_other
+    )
+
+    final_remaining = final_income - final_total
+
+    fig = go.Figure(
+        go.Pie(
+            labels=[
+                "Needs",
+                "Emergency",
+                "Laptop",
+                "Wants",
+                "Other",
+                "Remaining",
+            ],
+            values=[
+                final_needs,
+                final_emergency,
+                final_goal,
+                final_wants,
+                final_other,
+                max(0, final_remaining),
+            ],
+            hole=0.55,
+        )
+    )
+
+    fig.update_layout(
+        title="Alex's monthly blueprint",
+        height=400,
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.metric(
+        "Total allocated",
+        money(final_total),
+    )
+
+    st.metric(
+        "Remaining",
+        money(final_remaining),
+    )
+
+    if final_remaining < 0:
+        st.error(
+            "Your blueprint exceeds ₹30,000. "
+            "Adjust the allocations."
+        )
+    elif final_remaining == 0:
+        st.success(
+            "Every rupee has a purpose. "
+            "Your plan balances."
+        )
+    else:
+        st.info(
+            "You still have money to assign. "
+            "Consider another goal or future expense."
+        )
+
+    st.subheader("🎓 What you learned")
+
+    st.markdown("""
+    - Financial planning
+    - Cash flow
+    - Income and expenses
+    - Emergency savings
+    - Needs and wants
+    - Budgeting
+    - Goal planning
+    - Spending decisions
+    """)
+
+    st.markdown("""
+    <div class="c3-scene">
+        <div class="c3-scene-emoji">🏆</div>
+        <h2>Financial Foundation Complete</h2>
+        <p>
+        Good financial decisions are not about being perfect.
+        They are about understanding your money and making
+        deliberate choices consistently.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.write(
+        "Next chapter: Understanding debt, interest, "
+        "borrowing and repayment."
+    )
+
+    completion_button(12)
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def show_chapter3():
+
+    init_state()
+
+    st.markdown(
+        """
+        <style>
+        @keyframes c3float {
+            0% { transform:translateY(0px); }
+            50% { transform:translateY(-9px); }
+            100% { transform:translateY(0px); }
+        }
+
+        @keyframes c3slide {
+            from {opacity:0;transform:translateY(15px);}
+            to {opacity:1;transform:translateY(0px);}
+        }
+
+        @keyframes c3glow {
+            0% {opacity:.7;}
+            50% {opacity:1;}
+            100% {opacity:.7;}
+        }
+
+        .c3-hero {
+            background:linear-gradient(135deg,#0f172a,#164e63,#134e4a);
+            border:1px solid #286577;
+            border-radius:25px;
+            padding:28px 20px;
+            text-align:center;
+            animation:c3slide .6s ease;
+        }
+
+        .c3-hero h1 {
+            color:white;
+            font-size:30px;
+        }
+
+        .c3-hero p {
+            color:#c7e6f5;
+            font-size:17px;
+        }
+
+        .c3-hero-emoji {
+            font-size:65px;
+            animation:c3float 3s infinite;
+        }
+
+        .c3-scene {
+            background:linear-gradient(135deg,#14263c,#1b3a57);
+            border:1px solid #2d5675;
+            border-radius:20px;
+            padding:22px;
+            margin:15px 0;
+            animation:c3slide .5s ease;
+        }
+
+        .c3-scene h3,.c3-scene h2 {
+            color:#e2f2ff;
+        }
+
+        .c3-scene p {
+            color:#c4d9ea;
+        }
+
+        .c3-scene-emoji {
+            font-size:55px;
+            text-align:center;
+            animation:c3float 4s infinite;
+        }
+
+        .c3-card {
+            background:linear-gradient(135deg,#10243c,#17365a);
+            border:1px solid #2b5279;
+            border-radius:18px;
+            padding:20px;
+            margin:12px 0;
+            animation:c3slide .5s ease;
+        }
+
+        .c3-card h4 {
+            color:#a5f3fc;
+        }
+
+        .c3-card p {
+            color:#d5e7f5;
+        }
+
+        .c3-flow {
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            margin:15px 0;
+        }
+
+        .c3-flow-item {
+            min-width:100px;
+            background:linear-gradient(135deg,#17365a,#10243c);
+            border:1px solid #2b5279;
+            border-radius:17px;
+            padding:14px;
+            text-align:center;
+            color:#d8e8f5;
+            animation:c3slide .7s ease;
+        }
+
+        .c3-flow-item div {
+            font-size:35px;
+            animation:c3glow 3s infinite;
+        }
+
+        .c3-arrow {
+            font-size:25px;
+            color:#34d399;
+            font-weight:bold;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.title("💰 MoneyLab")
+
+    st.caption(
+        "Chapter 3 • Building Your Financial Foundation"
+    )
+
+    st.markdown(
+        """
+        <div class="c3-scene">
+            <h2>🗺️ Your financial journey</h2>
+            <p>
+            You are learning to manage money in the real world.
+            Make decisions, experiment with numbers and
+            understand the consequences.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    completed = st.session_state.c3_new_completed
+
+    completed_count = len(completed)
+
+    st.progress(completed_count / 4)
+
+    st.caption(
+        f"{completed_count}/4 lessons marked complete"
+    )
+
+    navigation()
+
+    st.divider()
+
+    current = st.session_state.c3_new_lesson
+
+    if current == 0:
+        show_lesson9()
+
+    elif current == 1:
+        show_lesson10()
+
+    elif current == 2:
+        show_lesson11()
+
+    elif current == 3:
+        show_lesson12()
+
+    st.divider()
+
+    st.markdown(
+        """
+        <div style="
+            text-align:center;
+            padding:15px;
+            color:gray;
+        ">
+        MoneyLab • Learn Money by Living It
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
