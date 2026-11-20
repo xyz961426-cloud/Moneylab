@@ -1,6 +1,7 @@
 
 import streamlit as st
 import plotly.graph_objects as go
+
 from lesson1 import lesson1
 from lesson2 import lesson2
 from lesson3 import lesson3
@@ -10,11 +11,26 @@ from lesson6 import show_lesson6
 from lesson7 import lesson7
 from lesson8 import lesson8
 
-st.set_page_config(page_title="MoneyLab", page_icon="💰", layout="wide")
+from chapter3 import show_chapter3
+from chapter4 import show_chapter4
+from chapter5 import show_chapter5
+from chapter6 import show_chapter6
+from chapter7 import show_chapter7
+from chapter8 import show_chapter8
+from chapter9 import show_chapter9
+from chapter10 import show_chapter10
+from chapter11 import show_chapter11
+
+st.set_page_config(
+    page_title="MoneyLab",
+    page_icon="💰",
+    layout="wide"
+)
 
 # NAVIGATION CALLBACK
 def go_to_page(target):
     st.session_state.navigation = target
+
 
 # DESIGN
 st.markdown("""
@@ -56,6 +72,7 @@ h1, h2, h3 {
 </style>
 """, unsafe_allow_html=True)
 
+
 # SIDEBAR
 st.sidebar.markdown("# 💰 MoneyLab")
 st.sidebar.caption("LEARN MONEY BY LIVING IT")
@@ -67,6 +84,7 @@ pages = [
     "Life Simulator",
     "Investment Lab",
     "Progress",
+
     "Lesson 1",
     "Lesson 2",
     "Lesson 3",
@@ -74,7 +92,17 @@ pages = [
     "Lesson 5",
     "Lesson 6",
     "Lesson 7",
-    "Lesson 8"
+    "Lesson 8",
+
+    "Chapter 3 • Lessons 9–12",
+    "Chapter 4 • Lessons 13–16",
+    "Chapter 5 • Lessons 17–20",
+    "Chapter 6 • Lessons 21–24",
+    "Chapter 7 • Lessons 25–28",
+    "Chapter 8 • Lessons 29–32",
+    "Chapter 9 • Lessons 33–36",
+    "Chapter 10 • Lessons 37–40",
+    "Chapter 11 • Lessons 41–44"
 ]
 
 if "navigation" not in st.session_state:
@@ -88,6 +116,7 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.caption("MoneyLab | Financial Education")
+
 
 # DASHBOARD
 if page == "Dashboard":
@@ -118,15 +147,11 @@ if page == "Dashboard":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("")
-
     st.markdown("## 🌱 Start Your Learning Journey")
 
     st.write("""
-    New to finance? Start with Lesson 1.
-
-    MoneyLab teaches you through stories, decisions,
-    simulations and practical explanations.
+    MoneyLab teaches financial concepts through stories,
+    interactive simulations, decisions and practical explanations.
     """)
 
     st.button(
@@ -138,89 +163,39 @@ if page == "Dashboard":
     )
 
     st.markdown("---")
-
-    # LEARNING ROADMAP
     st.markdown("## 🗺️ Your Learning Path")
 
-    st.write(
-        "Follow the lessons in order. Each chapter introduces "
-        "financial ideas through practical experiences."
-    )
+    chapters = [
+        ("Lesson 1", "Start your financial journey."),
+        ("Lesson 2", "Build your understanding of money."),
+        ("Lesson 3", "Continue learning financial fundamentals."),
+        ("Lesson 4", "Smart Spending."),
+        ("Lesson 5", "The Emergency Trap."),
+        ("Lesson 6", "The Investing Race."),
+        ("Lesson 7", "Continue your financial education."),
+        ("Lesson 8", "Continue your financial education."),
+        ("Chapter 3 • Lessons 9–12", "Explore the next four lessons."),
+        ("Chapter 4 • Lessons 13–16", "Understanding Debt."),
+        ("Chapter 5 • Lessons 17–20", "The Investing World."),
+        ("Chapter 6 • Lessons 21–24", "The World of Bonds."),
+        ("Chapter 7 • Lessons 25–28", "Mutual Funds & ETFs."),
+        ("Chapter 8 • Lessons 29–32", "The Power of Compounding & Wealth Building."),
+        ("Chapter 9 • Lessons 33–36", "Banking, Central Banks & the Economy."),
+        ("Chapter 10 • Lessons 37–40", "Taxes & Personal Finance."),
+        ("Chapter 11 • Lessons 41–44", "Financial Markets & Trading.")
+    ]
 
-    # LESSON 1
-    with st.container(border=True):
-        st.markdown("### 📘 Lesson 1")
-        st.write("Begin your financial learning journey.")
-        st.button(
-            "Open Lesson 1 →",
-            key="dash_l1",
-            on_click=go_to_page,
-            args=("Lesson 1",)
-        )
+    for title, description in chapters:
+        with st.container(border=True):
+            st.markdown(f"### 📘 {title}")
+            st.write(description)
 
-    # LESSON 2
-    with st.container(border=True):
-        st.markdown("### 📘 Lesson 2")
-        st.write("Continue building your financial understanding.")
-        st.button(
-            "Open Lesson 2 →",
-            key="dash_l2",
-            on_click=go_to_page,
-            args=("Lesson 2",)
-        )
-
-    # LESSON 3
-    with st.container(border=True):
-        st.markdown("### 📘 Lesson 3")
-        st.write("Continue your financial education.")
-        st.button(
-            "Open Lesson 3 →",
-            key="dash_l3",
-            on_click=go_to_page,
-            args=("Lesson 3",)
-        )
-
-    # LESSON 4
-    with st.container(border=True):
-        st.markdown("### 🛒 Lesson 4 — Smart Spending")
-        st.write(
-            "Learn to distinguish needs, wants and luxuries, "
-            "and make your own spending decisions."
-        )
-        st.button(
-            "Open Lesson 4 →",
-            key="dash_l4",
-            on_click=go_to_page,
-            args=("Lesson 4",)
-        )
-
-    # LESSON 5
-    with st.container(border=True):
-        st.markdown("### 🚨 Lesson 5 — The Emergency Trap")
-        st.write(
-            "Explore emergency funds, borrowing, interest "
-            "and the consequences of financial decisions."
-        )
-        st.button(
-            "Open Lesson 5 →",
-            key="dash_l5",
-            on_click=go_to_page,
-            args=("Lesson 5",)
-        )
-
-    # LESSON 6
-    with st.container(border=True):
-        st.markdown("### 📈 Lesson 6 — The Investing Race")
-        st.write(
-            "Explore compound growth, investment risk "
-            "and how time affects investing."
-        )
-        st.button(
-            "Open Lesson 6 →",
-            key="dash_l6",
-            on_click=go_to_page,
-            args=("Lesson 6",)
-        )
+            st.button(
+                f"Open {title} →",
+                key=f"dash_{title}",
+                on_click=go_to_page,
+                args=(title,)
+            )
 
     st.markdown("---")
 
@@ -306,6 +281,7 @@ if page == "Dashboard":
         "and the difference between income and wealth."
     )
 
+
 # MONEY BASICS
 elif page == "Money Basics":
 
@@ -317,14 +293,32 @@ elif page == "Money Basics":
         "and services money buys."
     )
 
-    money = st.slider("Starting money ($)", 100, 10000, 1000, 100)
-    inflation = st.slider("Annual inflation (%)", 0.0, 20.0, 5.0)
-    years = st.slider("Years", 1, 30, 10)
+    money = st.slider(
+        "Starting money ($)",
+        100, 10000, 1000, 100
+    )
+
+    inflation = st.slider(
+        "Annual inflation (%)",
+        0.0, 20.0, 5.0
+    )
+
+    years = st.slider(
+        "Years",
+        1, 30, 10
+    )
 
     future = money / (1 + inflation / 100) ** years
 
-    st.metric("Future purchasing power", f"${future:,.2f}")
-    st.caption("Illustration assuming constant inflation, not a forecast.")
+    st.metric(
+        "Future purchasing power",
+        f"${future:,.2f}"
+    )
+
+    st.caption(
+        "Illustration assuming constant inflation, not a forecast."
+    )
+
 
 # LIFE SIMULATOR
 elif page == "Life Simulator":
@@ -332,7 +326,12 @@ elif page == "Life Simulator":
     st.title("🌎 Life Simulator")
     st.markdown("### Manage your virtual monthly salary")
 
-    salary = st.number_input("Monthly income ($)", min_value=0, value=2500)
+    salary = st.number_input(
+        "Monthly income ($)",
+        min_value=0,
+        value=2500
+    )
+
     housing = st.slider("Housing ($)", 0, 2000, 600, 50)
     food = st.slider("Food ($)", 0, 1000, 300, 25)
     transport = st.slider("Transport ($)", 0, 1000, 150, 25)
@@ -356,27 +355,32 @@ elif page == "Life Simulator":
         st.success("You have money remaining.")
 
     if salary > 0:
-        st.metric("Savings rate", f"{remaining/salary*100:.1f}%")
+        st.metric(
+            "Savings rate",
+            f"{remaining/salary*100:.1f}%"
+        )
 
-    fig = go.Figure(data=[go.Pie(
-        labels=[
-            "Housing",
-            "Food",
-            "Transport",
-            "Entertainment",
-            "Other",
-            "Remaining"
-        ],
-        values=[
-            housing,
-            food,
-            transport,
-            entertainment,
-            other,
-            max(remaining, 0)
-        ],
-        hole=0.6
-    )])
+    fig = go.Figure(
+        data=[go.Pie(
+            labels=[
+                "Housing",
+                "Food",
+                "Transport",
+                "Entertainment",
+                "Other",
+                "Remaining"
+            ],
+            values=[
+                housing,
+                food,
+                transport,
+                entertainment,
+                other,
+                max(remaining, 0)
+            ],
+            hole=0.6
+        )]
+    )
 
     fig.update_layout(
         template="plotly_dark",
@@ -385,16 +389,32 @@ elif page == "Life Simulator":
 
     st.plotly_chart(fig, use_container_width=True)
 
+
 # INVESTMENT LAB
 elif page == "Investment Lab":
 
     st.title("📈 Investment Lab")
     st.markdown("### Explore hypothetical compound growth")
 
-    initial = st.slider("Initial investment ($)", 100, 100000, 1000, 100)
-    monthly = st.slider("Monthly contribution ($)", 0, 5000, 100, 50)
-    rate = st.slider("Assumed annual return (%)", 0.0, 20.0, 8.0, 0.5)
-    years = st.slider("Years", 1, 50, 20)
+    initial = st.slider(
+        "Initial investment ($)",
+        100, 100000, 1000, 100
+    )
+
+    monthly = st.slider(
+        "Monthly contribution ($)",
+        0, 5000, 100, 50
+    )
+
+    rate = st.slider(
+        "Assumed annual return (%)",
+        0.0, 20.0, 8.0, 0.5
+    )
+
+    years = st.slider(
+        "Years",
+        1, 50, 20
+    )
 
     balance = initial
     values = [balance]
@@ -413,7 +433,14 @@ elif page == "Investment Lab":
     c.metric("Illustrative Growth", f"${balance-contributed:,.2f}")
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(y=values, mode="lines", name="Portfolio"))
+
+    fig.add_trace(
+        go.Scatter(
+            y=values,
+            mode="lines",
+            name="Portfolio"
+        )
+    )
 
     fig.update_layout(
         template="plotly_dark",
@@ -429,37 +456,92 @@ elif page == "Investment Lab":
         "Assumed returns are not guaranteed. Real investments can lose money."
     )
 
+
 # LESSON 1
 elif page == "Lesson 1":
     lesson1()
+
 
 # LESSON 2
 elif page == "Lesson 2":
     lesson2()
 
+
 # LESSON 3
 elif page == "Lesson 3":
     lesson3()
+
 
 # LESSON 4
 elif page == "Lesson 4":
     show_lesson4()
 
+
 # LESSON 5
 elif page == "Lesson 5":
     show_lesson5()
+
 
 # LESSON 6
 elif page == "Lesson 6":
     show_lesson6()
 
+
+# LESSON 7
 elif page == "Lesson 7":
     lesson7()
 
 
+# LESSON 8
 elif page == "Lesson 8":
     lesson8()
-    
+
+
+# CHAPTER 3
+elif page == "Chapter 3 • Lessons 9–12":
+    show_chapter3()
+
+
+# CHAPTER 4
+elif page == "Chapter 4 • Lessons 13–16":
+    show_chapter4()
+
+
+# CHAPTER 5
+elif page == "Chapter 5 • Lessons 17–20":
+    show_chapter5()
+
+
+# CHAPTER 6
+elif page == "Chapter 6 • Lessons 21–24":
+    show_chapter6()
+
+
+# CHAPTER 7
+elif page == "Chapter 7 • Lessons 25–28":
+    show_chapter7()
+
+
+# CHAPTER 8
+elif page == "Chapter 8 • Lessons 29–32":
+    show_chapter8()
+
+
+# CHAPTER 9
+elif page == "Chapter 9 • Lessons 33–36":
+    show_chapter9()
+
+
+# CHAPTER 10
+elif page == "Chapter 10 • Lessons 37–40":
+    show_chapter10()
+
+
+# CHAPTER 11
+elif page == "Chapter 11 • Lessons 41–44":
+    show_chapter11()
+
+
 # PROGRESS
 elif page == "Progress":
 
@@ -470,9 +552,12 @@ elif page == "Progress":
         "you continue through the MoneyLab learning journey."
     )
 
-    st.write("Explore the lessons to build your financial knowledge.")
+    st.write(
+        "Explore the lessons to build your financial knowledge."
+    )
 
     st.progress(0)
+
 
 # FOOTER
 st.markdown("---")
